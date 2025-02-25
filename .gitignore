@@ -31,5 +31,6 @@ gulp/res/js/web3.js
 
 # some ide and testing files, artefacts, etc
 .idea/
+.vscode/
 coverage/
 junit.xml
