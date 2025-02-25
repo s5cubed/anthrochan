@@ -95,6 +95,10 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							span.post-file-info
 								span
 									a.filename(href='/file/'+file.filename title='Download '+file.originalFilename download=file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : file.originalFilename}
+									|
+									|
+									a.filename(href='/file/'+file.filename title='Download '+file.originalFilename download=post.u+fileindex+' '+file.originalFilename) #{post.spoiler || file.spoiler ? __('Spoiler File') : 'Archive'}
+
 								br
 								if globalmanage && file.phash != null
 									span #{file.phash}
