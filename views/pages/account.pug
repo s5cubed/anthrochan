@@ -98,18 +98,17 @@ block content
 		ul
 			for b in user.staffBoards
 				li
-					if permissions.get(Permissions.MANAGE_BOARD_GENERAL) || boardPermissions[b].get(Permissions.MANAGE_BOARD_GENERAL)
-						a(href=`/${b}/index.html`) /#{b}/
-						|  -  
-						a(href=`/${b}/manage/index.html`) #{__('Mod Index')}
-						|    
-						a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
-						|   
-						a(href=`/${b}/manage/recent.html`) #{__('Recent')}
-						|   
-						a(href=`/${b}/manage/reports.html`) #{__('Reports')}
-							if boardReportCountMap[b]
-								b  (#{boardReportCountMap[b]})
+					a(href=`/${b}/index.html`) /#{b}/
+					|  -  
+					a(href=`/${b}/manage/index.html`) #{__('Mod Index')}
+					|    
+					a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
+					|   
+					a(href=`/${b}/manage/recent.html`) #{__('Recent')}
+					|   
+					a(href=`/${b}/manage/reports.html`) #{__('Reports')}
+						if boardReportCountMap[b]
+							b  (#{boardReportCountMap[b]})
 					if permissions.get(Permissions.MANAGE_BOARD_BANS) || boardPermissions[b].get(Permissions.MANAGE_BOARD_BANS)
 						|   
 						a(href=`/${b}/manage/bans.html`) #{__('Bans')}
