@@ -1,26 +1,15 @@
-# jschan
+# anthrochan
 
-Anonymous imageboard software that doesn't suck.
+Custom fork of jschan imageboard software.
 
 Repo Mirror(s):
- - https://gitgud.io/fatchan/jschan
- - https://git.basedflare.com/fatchan/jschan
+ - https://github.com/anthro-foo/anthrochan
 
 Contact the author:
- - [Session](https://getsession.org/): `051b2ff270769d20764fa1b8e6bc3240b0a3c28ffb3242e7cce60db479b23ef427`
- - Telegram: [t.me/basedflare](https://t.me/basedflare)
- - Email: see my gitgud profile
+ - Email: anthrofoo@mailfence.com
 
-
-## Live instances (Unofficial)
- - 🇺🇸 [94chan](https://94chan.org)
- - 🇵🇹/🇧🇷 [ptchan](https://ptchan.org)
- - 🇺🇸/🇰🇷 [heolkek](https://heolkek.cafe)
- - 🇺🇸 [zzzchan](https://zzzchan.xyz)
- - 🇧🇷 [27chan](https://27chan.org)
- - 🇺🇸 [jakparty](https://jakparty.soy)
- - 🇮🇹 [nuichan](https://niuchan.org)
- - And many more...
+## Live instance
+ - https://anthro.foo
 
 ## Features
  - [x] Multiple language support (🇬🇧 🇵🇹 🇧🇷 🇷🇺 🇮🇹 🇪🇸)
@@ -52,20 +41,7 @@ See [CHANGELOG.md](CHANGELOG.md) for changes between versions.
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
 
-## Related Projects
-
-Official:
- - [fatchan/jschan-docs](https://gitgud.io/fatchan/jschan-docs/) - API Documentation for jschan ([gitgud pages](https://fatchan.gitgud.site/jschan-docs/#introduction))
- - [fatchan/jschan-api-go](https://gitgud.io/fatchan/jschan-api-go) - WIP Golang API Client for jschan ([gitgud pages](https://fatchan.gitgud.site/jschan-api-go/pkg/jschan/))
- - [jschan-antispam group](https://gitgud.io/jschan-antispam/) - Multiple projects that are compatible with jschan and implement more sophisticated antispam capabilities.
-
-Unofficial: **Not guaranteed to work or be safe, use at your own risk.**
- - [globalafk](https://git.ptchan.org/globalafk/) - "A simple python script that sends ugly notifications when something happens on a jschan imageboard that you moderate."
- - [reporter](https://git.ptchan.org/reporter/) - news bot that fetches news from a provider and posts a snippet of it on a configurable board of a configurable jschan imageboard
- - [yacam](https://git.ptchan.org/yacam/) - a bot that tries to detect (dumb) spam on jschan imageboards and does something about it
-
 ## For generous people
 
-Bitcoin (BTC): [`bc1q4elrlz5puak4m9xy3hfvmpempnpqpu95v8s9m6`](bitcoin:bc1q4elrlz5puak4m9xy3hfvmpempnpqpu95v8s9m6)
-
-Monero (XMR): [`89J9DXPLUBr5HjNDNZTEo4WYMFTouSsGjUjBnUCCUxJGUirthnii4naZ8JafdnmhPe4NP1nkWsgcK82Uga7X515nNR1isuh`](monero:89J9DXPLUBr5HjNDNZTEo4WYMFTouSsGjUjBnUCCUxJGUirthnii4naZ8JafdnmhPe4NP1nkWsgcK82Uga7X515nNR1isuh)
+Please visit https://gitgud.io/fatchan/jschan and see the README.md
+for donating.
