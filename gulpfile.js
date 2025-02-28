@@ -700,7 +700,7 @@ module.exports = {
 	css: gulp.series(init, css, closeConnections),
 	images: gulp.series(images, closeConnections),
 	icons: gulp.series('check-for-favicon-update', icons, closeConnections),
-	reset: gulp.series(init, wipe, build, closeConnections),
+	//reset: gulp.series(init, wipe, build, closeConnections),
 	custompages: gulp.series(init, custompages, closeConnections),
 	scripts: gulp.series(init, scripts, closeConnections),
 	cache: gulp.series(cache, closeConnections),
