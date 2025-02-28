@@ -307,20 +307,7 @@ module.exports = () => describe('login and create test board', () => {
 			CREATE_BOARD: '2',
 			CREATE_ACCOUNT: '3',
 			BYPASS_CAPTCHA: '8',
-			USE_MARKDOWN_PINKTEXT: '35',
-			USE_MARKDOWN_GREENTEXT: '36',
-			USE_MARKDOWN_BOLD: '37',
-			USE_MARKDOWN_UNDERLINE: '38',
-			USE_MARKDOWN_STRIKETHROUGH: '39',
-			USE_MARKDOWN_TITLE: '40',
-			USE_MARKDOWN_ITALIC: '41',
-			USE_MARKDOWN_SPOILER: '42',
-			USE_MARKDOWN_MONO: '43',
-			USE_MARKDOWN_CODE: '44',
-			USE_MARKDOWN_DETECTED: '45',
-			USE_MARKDOWN_LINK: '46',
-			USE_MARKDOWN_DICE: '47',
-			USE_MARKDOWN_FORTUNE: '48'
+			USE_MARKDOWN: '35',
 		});
 		const response = await fetch('http://localhost/forms/global/editrole', {
 			headers: {

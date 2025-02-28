@@ -220,22 +220,7 @@ async function wipe() {
 
 	const ANON = new Permission();
 	ANON.setAll([
-		Permissions.USE_MARKDOWN_PINKTEXT,
-		Permissions.USE_MARKDOWN_GREENTEXT,
-		Permissions.USE_MARKDOWN_BOLD,
-		Permissions.USE_MARKDOWN_UNDERLINE,
-		Permissions.USE_MARKDOWN_STRIKETHROUGH,
-		Permissions.USE_MARKDOWN_TITLE,
-		Permissions.USE_MARKDOWN_ITALIC,
-		Permissions.USE_MARKDOWN_SPOILER,
-		Permissions.USE_MARKDOWN_MONO,
-		Permissions.USE_MARKDOWN_CODE,
-		Permissions.USE_MARKDOWN_DETECTED,
-		Permissions.USE_MARKDOWN_LINK,
-		Permissions.USE_MARKDOWN_DICE,
-		Permissions.USE_MARKDOWN_FORTUNE,
-		Permissions.CREATE_BOARD,
-		Permissions.CREATE_ACCOUNT,
+		Permissions.USE_MARKDOWN,
 	]);
 
 	const BOARD_STAFF_DEFAULTS = new Permission(ANON.base64);
@@ -246,13 +231,6 @@ async function wipe() {
 	]);
 
 	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
-	BOARD_STAFF.setAll([
-		Permissions.MANAGE_BOARD_OWNER,
-		Permissions.MANAGE_BOARD_STAFF,
-		Permissions.MANAGE_BOARD_CUSTOMISATION,
-		Permissions.MANAGE_BOARD_SETTINGS,
-		Permissions.USE_MARKDOWN_IMAGE,
-	]);
 
 	const BOARD_OWNER_DEFAULTS = new Permission(BOARD_STAFF.base64);
 	BOARD_OWNER_DEFAULTS.setAll([
@@ -260,17 +238,9 @@ async function wipe() {
 		Permissions.MANAGE_BOARD_STAFF,
 		Permissions.MANAGE_BOARD_CUSTOMISATION,
 		Permissions.MANAGE_BOARD_SETTINGS,
-		Permissions.USE_MARKDOWN_IMAGE,
 	]);
 
-	const BOARD_OWNER = new Permission(BOARD_STAFF.base64);
-	BOARD_OWNER.setAll([
-		Permissions.MANAGE_BOARD_OWNER,
-		Permissions.MANAGE_BOARD_STAFF,
-		Permissions.MANAGE_BOARD_CUSTOMISATION,
-		Permissions.MANAGE_BOARD_SETTINGS,
-		Permissions.USE_MARKDOWN_IMAGE,
-	]);
+	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
 
 	const GLOBAL_STAFF = new Permission(BOARD_OWNER.base64);
 	GLOBAL_STAFF.setAll([
@@ -285,14 +255,15 @@ async function wipe() {
 		Permissions.BYPASS_BANS,
 		Permissions.BYPASS_SPAMCHECK,
 		Permissions.BYPASS_RATELIMITS,
-		Permissions.USE_MARKDOWN_IMAGE,
 	]);
 
 	const ADMIN = new Permission(GLOBAL_STAFF.base64);
 	ADMIN.setAll([
+		Permissions.CREATE_BOARD,
+		Permissions.CREATE_ACCOUNT,
 		Permissions.MANAGE_GLOBAL_ACCOUNTS,
 		Permissions.MANAGE_GLOBAL_ROLES,
-		Permissions.VIEW_RAW_IP,
+		Permissions.USE_MARKDOWN_IMAGE,
 	]);
 
 	const ROOT = new Permission();
