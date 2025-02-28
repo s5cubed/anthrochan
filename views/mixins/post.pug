@@ -59,9 +59,12 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 					| 
 			span.post-links
 				a.noselect.no-decoration(href=`${postURL}#${post.postId}`) #{__('No.')}
-				span.post-quoters
+				span.post-quote-num
 					a.no-decoration(href=`${postURL}#postform`) #{post.postId}
-				|  
+				| 
+				span.post-quote(post-id=`${post.postId}`)
+					a.no-decoration(href=`${postURL}#postform`) Quote
+				| 
 				if !post.thread && (truncate || manage || globalmanage)
 					|  
 					span.noselect: a(href=`${postURL}`) [#{__('Open')}]

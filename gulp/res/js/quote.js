@@ -1,6 +1,5 @@
 /* globals isThread setLocalStorage */
 window.addEventListener('DOMContentLoaded', () => {
-
 	const postForm = document.querySelector('#postform');
 	const topPostButton = document.querySelector('a[href="#postform"]');
 	const bottomPostButton = document.querySelector('.bottom-reply');
@@ -48,7 +47,14 @@ window.addEventListener('DOMContentLoaded', () => {
 		messageBox.setSelectionRange(index+str.length, index+str.length); //this scroll anyway, no need to set scrolltop
 	};
 
-	const addQuote = function(number) {
+	const addQuoteToPostForm = function(quoteText) {
+		openPostForm();
+		addToMessageBox(quoteText);
+		messageBox.focus();
+		messageBox.dispatchEvent(new Event('input'));
+	};
+
+	const addQuoteNum = function(number) {
 		let quoteText = `>>${number}\n`;
 		let selection;
 		if (window.getSelection) {
@@ -64,14 +70,49 @@ window.addEventListener('DOMContentLoaded', () => {
 				.join('\n'); //join it back together and newline
 			quoteText += `${quotedSelection}\n`;
 		}
-		openPostForm();
-		addToMessageBox(quoteText);
-		messageBox.focus();
-		messageBox.dispatchEvent(new Event('input'));
+		addQuoteToPostForm(quoteText);
+	};
+
+	function getPostMessage(postNum) {
+	    // Select the post container using the data-post-id attribute
+	    const postContainer = document.querySelector(`.post-container[data-post-id='${postNum}']`);
+		
+	    if (postContainer) {
+	        // Find the post-message div inside the selected post container
+	        const postMessage = postContainer.querySelector('.post-message');
+		
+	        if (postMessage) {
+	            return postMessage.innerText.trim(); // Extract and return the text
+	        }
+	    }
+	
+	    return null; // Return null if the element is not found
+	}
+
+	const addQuote = function(number) {
+		let quoteText = ``;
+		const selection = getPostMessage(number);
+		if (selection && selection.length > 0) {
+			const quotedSelection = selection.split(/\r?\n/) //split by lines
+				.map(line => line.trim().length > 0 ? `>${line}` : line) //make non empty lines greentext
+				.join('\n'); //join it back together and newline
+			quoteText += `${quotedSelection}`;
+		}
+		addQuoteToPostForm(quoteText);	
+	};
+
+	const quoteNum = function(e) {
+		const quoteNum = this.textContent.trim();
+		if (isThread && !e.ctrlKey) {
+			addQuoteNum(quoteNum);
+		} else {
+			setLocalStorage('clickedQuoteNum', quoteNum);
+		}
 	};
 
 	const quote = function(e) {
-		const quoteNum = this.textContent.trim();
+		const quoteNum = this.getAttribute('post-id');
+
 		if (isThread && !e.ctrlKey) {
 			addQuote(quoteNum);
 		} else {
@@ -84,18 +125,33 @@ window.addEventListener('DOMContentLoaded', () => {
 		openPostForm();
 	}
 	if (isThread) {
-		//add quote to postform if link clicked with quote
-		const quoteNum = localStorage.getItem('clickedQuote');
-		if (quoteNum != null) {
+		let quoteNum = null;
+		if (localStorage.getItem('clickedQuoteNum')) {
+			quoteNum = localStorage.getItem('clickedQuoteNum');
+			addQuoteNum(quoteNum);
+		}
+		if (localStorage.getItem('clickedQuote')) {
+			quoteNum = localStorage.getItem('clickedQuote');
 			addQuote(quoteNum);
+		}
+
+		if (quoteNum != null) {
 			//scroll to the post you quoted
 			const quotingPost = document.getElementById(quoteNum);
 			if (quotingPost) {
 				quotingPost.scrollIntoView();
 			}
 		}
+
+		localStorage.removeItem('clickedQuoteNum')
 		localStorage.removeItem('clickedQuote');
 	}
+
+	const addQuoteNumListeners = (l) => {
+		for (let i = 0; i < l.length; i++) {
+			l[i].addEventListener('click', quoteNum, false);
+		}
+	};
 
 	const addQuoteListeners = (l) => {
 		for (let i = 0; i < l.length; i++) {
@@ -103,16 +159,16 @@ window.addEventListener('DOMContentLoaded', () => {
 		}
 	};
 
-	const links = document.getElementsByClassName('post-quoters');
-	addQuoteListeners(links);
+	addQuoteNumListeners(document.getElementsByClassName('post-quote-num'));
+	addQuoteListeners(document.getElementsByClassName('post-quote'))
 
 	window.addEventListener('addPost', function(e) {
 		if (e.detail.hover) {
 			return; //dont need to handle hovered posts for this
 		}
 		const post = e.detail.post;
-		const newlinks = post.getElementsByClassName('post-quoters');
-		addQuoteListeners(newlinks);
+		addQuoteNumListeners(post.getElementsByClassName('post-quote-num'));
+		addQuoteListeners(post.getElementsByClassName('post-quote'));
 	});
 
 });
