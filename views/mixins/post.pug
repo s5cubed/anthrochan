@@ -160,7 +160,7 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 				else
 					pre.post-message !{post.message}
 			if !post.message && post.files.length === 0
-				p #{__('No message or files.')}
+				img.file-thumb(src='/file/deleted.png' width='200' height='200')
 			if post.signature && post.address
 				+web3signature(post.signature, post.address)
 			if post.edited

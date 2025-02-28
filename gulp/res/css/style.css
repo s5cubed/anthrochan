@@ -100,10 +100,14 @@ pre {
 	background: var(--navbar-color);
 	box-shadow: 0 0 3px 1px var(--darken);
 	border-bottom: 1px solid var(--post-outline-color);
-	position: fixed;
+	position: sticky;
 	width: 100%;
 	z-index: 2;
 	top: 0;
+	@media only screen and (max-width: 600px) {
+		display: grid;
+		grid-template-columns: auto auto auto;
+	}
 }
 
 .replies {
@@ -214,9 +218,6 @@ pre {
 #settings, .dummy-link {
 	cursor: pointer;
 }
-#settings::after {
-	content: attr(data-label);
-}
 .expand-omitted {
 	background-color: var(--post-color);
 	border: 1px solid var(--font-color);
@@ -292,8 +293,8 @@ object {
 	padding: 5px;
 	margin: 5px;
 	text-align: center;
-	height: 340px;
-	width: 280px;
+	height: 220px;
+	width: 220px;
 	overflow: hidden;
 	border: 1px solid var(--post-outline-color);
 	box-sizing: border-box;
@@ -1018,6 +1019,9 @@ input:invalid, textarea:invalid {
 	text-align: left;
 }
 
+.post-message-catalog {
+	text-align: center;
+}
 .post-container {
 	box-sizing: border-box;
 	padding: .5em;
@@ -1155,8 +1159,15 @@ input:invalid, textarea:invalid {
 	border: none;
 }
 
+.navbar-img {
+	max-height:20vh;
+	height: 50px;
+	@media only screen and (max-width: 600px) {
+		height: 14vw;
+	}
+}
+
 .nav-item {
-	line-height: 3em;
 	text-decoration: none;
 	float: left;
 	padding-left: 10px;
@@ -1662,9 +1673,6 @@ row.wrap.sb .col {
 	}
 	#hotposts td:nth-child(3) {
 		display: none;
-	}
-	#settings::after {
-		content: "\2699"!important;
 	}
 	#settingsmodal {
 		width: 100%;

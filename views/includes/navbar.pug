@@ -1,12 +1,17 @@
 unless minimal
 	nav.navbar
-		a.nav-item(href='/index.html') #{__('Home')}
+		a.nav-item(href='/index.html')
+			img(class='navbar-img' src='/file/home.png')
 		a(href='/boards.html' class=`nav-item ${enableWebring ? 'short-nav' : ''}`)
-			| #{__('Boards')} 
+			img(class='navbar-img' src='/file/boards.png')
 			if enableWebring
 				.rainbow +Webring
-		a.nav-item#overboardlink(href='/overboard.html') #{__('Overboard')}
-		a.nav-item(href='/account.html') #{__('Account')}
+		a.nav-item#overboardlink(href='/overboard.html')
+			img(class='navbar-img' src='/file/overboard.png')
+		a.nav-item(href='/account.html')
+			img(class='navbar-img' src='/file/account.png')
 		if !modview && board
-			a.nav-item(href=`/${board._id}/manage/${managePage || 'index.html'}`) #{__('Manage')}
-		a.jsonly.nav-item.right#settings(data-label=(__('Settings')))
+			a.nav-item(href=`/${board._id}/manage/${managePage || 'index.html'}`)
+				img(class='navbar-img' src='/file/manage.png')
+		a.jsonly.nav-item.right#settings(data-label=(__('')))
+			img(class='navbar-img' src='/file/settings.png')
