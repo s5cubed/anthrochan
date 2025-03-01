@@ -512,9 +512,18 @@ p {
 	color: var(--pinktext-color);
 }
 
+.orangetext {
+	color: #f6750b;
+}
+
+.bluetext {
+	color: #2424ad;
+	font-weight: bold;
+}
+
 .glowtext {
-	color: #008000; /* Darker green */
-    text-shadow: 0 0 10px #006400, 0 0 20px #006400, 0 0 30px #006400;
+	color: black; /* Darker green */
+    text-shadow: 0 0 2px #16ff16,0 0 20px #00f000,0 0 30px #006800;
 }
 
 .embimg {
@@ -1340,6 +1349,11 @@ iframe.captcha, iframe.bypass {
 
 iframe.captcha {
 	/*width: 100%;*/
+}
+
+iframe.vocaroo {
+	display: block;
+	margin-top: 3px;
 }
 
 iframe.embed-video {
