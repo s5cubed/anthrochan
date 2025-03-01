@@ -522,7 +522,7 @@ p {
 }
 
 .glowtext {
-	color: black; /* Darker green */
+	color: var(--input-color); /*Is always white or black as defined by themes.*/
     text-shadow: 0 0 2px #16ff16,0 0 20px #00f000,0 0 30px #006800;
 }
 
