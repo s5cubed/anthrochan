@@ -1,26 +1,48 @@
 # Contributing
 
-Thanks for considering contributing.
+## LICENSE
 
-Some links:
-  * [Kanban board](https://gitgud.io/fatchan/jschan/-/boards/4780) already has issues in swim lanes.
-
-## LICENSE?
-
-See [LICENSE](https://gitgud.io/fatchan/jschan/-/blob/master/LICENSE)
+See [LICENSE](https://github.com/anthro-foo/anthrochan/blob/main/LICENSE)
 
 ## Making changes
 
-  * Bug? Open an issue.
-  * Request? Open an issue and ask. Saves wasting your time making changes that will be denied for being bad or unwanted.
+For simplicity and speed, this project follows the GitHub flow model
+https://docs.github.com/en/get-started/using-github/github-flow.
+The code running on the server lives in the main branch. 
 
-When contributing, make a merge request with a clear list of what you've done.
+### GitHub
 
-Write clear commit messages. One line is fine for smaller changes, or multiple lines for bigger changes. Be clear and concise.
+Please hide your identity. Go into settings, and verify your username or email 
+don't contain any identifiable information. 
+In email settings, make sure `Keep my email addresses private` and `Block command line pushes that expose my email`  are checked.
 
-    $ git commit -m "A brief summary of the commit
-    > 
-    > A paragraph describing what changed and its impact."
+### Making a pull request
+
+Fork https://github.com/anthro-foo/anthrochan on GitHub and clone your fork locally.
+Inside the repo run
+
+```bash
+git remote add upstream https://github.com/anthro-foo/anthrochan
+git branch --set-upstream-to=upstream/main main
+git pull
+```
+
+This will set up your fork's `main` branch to stay 1:1 copy of anthrochan's `main`
+branch. If you want to make a change, in your fork repo create a branch `my-cool-feature`
+from your fork's main, when you are finished, create a pull request to anthrochan 
+`yourfork/my-cool-feature` -> `anthrochan/main`. Do not make the changes into fork's
+`main` branch because it should always be a 1:1 copy of `anthrochan/main`.
+
+Always test your changes.
+
+### Tips
+
+To avoid merge conflicts, periodically pull/fetch on your fork's `main` branch.
+Then rebase your feature branch and resolve conflicts. This will help fix them on the
+spot.
+
+When peforming risky actions, for example rebase/resolving conflicts, first always 
+create a backup of your feature branch before.
 
 ## Coding style
 
@@ -66,6 +88,3 @@ npm run test:all <filename|regex>
 ```
 
 Linting, code coverage and test results are reported in merge requests. Improvements to add tests and/or improve test coverage are welcomed.
-
-Thanks,
-Tom
