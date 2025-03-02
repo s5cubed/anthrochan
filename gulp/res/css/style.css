@@ -19,6 +19,18 @@ main.minimal {
 	height: 100vh;
 }
 
+.homepage-image {
+	/* display: block; */
+	/* align-content: center; */
+	width: 10%;
+	height: auto;
+
+	@media (max-width: 600px) {
+		width: 25%;
+	}
+}
+
+
 .form-post {
 	display: flex;
 	flex-direction: column;
@@ -1177,7 +1189,7 @@ input:invalid, textarea:invalid {
 	max-height:20vh;
 	height: 50px;
 	@media only screen and (max-width: 600px) {
-		height: 14vw;
+		height: 10vw;
 	}
 }
 
