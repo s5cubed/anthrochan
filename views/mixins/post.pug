@@ -87,7 +87,6 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 					if !post.thread
 						option(value='watch') #{__('Watch')}
 						option(value='playlist') #{__('Playlist')}
-					if !post.thread && !ban && !overboard
 						option(value='archive') Archive
 		.post-data
 			if post.files.length > 0
