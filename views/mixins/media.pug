@@ -1,0 +1,13 @@
+mixin media(file)
+    -const ip = viewRawIp === true ? file.origin_ip.raw : file.origin_ip.cloak;
+    -const type = file.mimetype.split('/')[0]
+    .post-file-src(data-type=type data-attachment=(file.attachment ? "true" : "false"))
+        a(target='_blank' href=`/file/${file.filename}`)
+            if file.hasThumb
+                img.file-thumb(src=`/file/thumb/${file.hash}${file.thumbextension}` height=file.geometry.thumbheight width=file.geometry.thumbwidth loading='lazy')
+            else if file.attachment
+                div.attachmentimg.file-thumb(data-mimetype=file.mimetype)
+            else if type === 'audio'
+                div.audioimg.file-thumb
+            else
+                img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')

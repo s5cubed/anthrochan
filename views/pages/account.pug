@@ -58,9 +58,16 @@ block content
 					|   
 					a(href=`/globalmanage/settings.html`) #{__('Global Settings')}
 
-	hr(size=1)
-	h4.no-m-p #{__('Boards you own')}:
+	if permissions.get(Permissions.MANAGE_BOARD_GENERAL)
+		hr(size=1)
+		h4.no-m-p #{__('General staff section')}
+		ul
+			li
+				a(href=`/globalmanage/approval.html`) #{__('Approval')}
+	
 	if user.ownedBoards && user.ownedBoards.length > 0
+		hr(size=1)
+		h4.no-m-p #{__('Boards you own')}:
 		ul
 			for b in user.ownedBoards
 				li
@@ -71,7 +78,8 @@ block content
 					a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
 					|   
 					a(href=`/${b}/manage/recent.html`) #{__('Recent')}
-					|   
+					|
+					|
 					a(href=`/${b}/manage/reports.html`) #{__('Reports')}
 						if boardReportCountMap[b]
 							b  (#{boardReportCountMap[b]})
@@ -89,12 +97,10 @@ block content
 					a(href=`/${b}/manage/custompages.html`) #{__('Custom Pages')}
 					|   
 					a(href=`/${b}/manage/staff.html`) #{__('Staff')}
-	else
-		p #{__('Nothing')}
 
-	hr(size=1)
-	h4.no-m-p #{__('Boards you are staff on')}:
 	if user.staffBoards && user.staffBoards.length > 0
+		hr(size=1)
+		h4.no-m-p #{__('Boards you are staff on')}:
 		ul
 			for b in user.staffBoards
 				li
@@ -106,7 +112,8 @@ block content
 						a(href=`/${b}/manage/catalog.html`) #{__('Mod Catalog')}
 						|   
 						a(href=`/${b}/manage/recent.html`) #{__('Recent')}
-						|   
+						|
+						|
 						a(href=`/${b}/manage/reports.html`) #{__('Reports')}
 							if boardReportCountMap[b]
 								b  (#{boardReportCountMap[b]})
@@ -128,8 +135,6 @@ block content
 					if permissions.get(Permissions.MANAGE_BOARD_STAFF) || boardPermissions[b].get(Permissions.MANAGE_BOARD_STAFF)
 						|   
 						a(href=`/${b}/manage/staff.html`) #{__('Staff')}
-	else
-		p #{__('Nothing')}
 
 	if user.staffBoards.length > 0 ||  user.ownedBoards.length > 0
 		hr(size=1)

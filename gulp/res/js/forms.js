@@ -685,7 +685,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('settingsReady', () => {
 
-	const forms = document.getElementsByTagName('form');
+	const forms = Array.from(document.getElementsByTagName('form'))
+                  .filter(form => !form.classList.contains('approval-form'));
 
 	for (let i = 0; i < forms.length; i++) {
 		if (forms[i].method === 'post') {

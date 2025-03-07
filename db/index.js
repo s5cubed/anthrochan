@@ -10,6 +10,7 @@ module.exports = {
 	Bans: require(__dirname+'/bans.js'),
 	Captchas: require(__dirname+'/captchas.js'),
 	Files: require(__dirname+'/files.js'),
+	Approval: require(__dirname+'/approval.js'),
 	News: require(__dirname+'/news.js'),
 	Filters: require(__dirname+'/filters.js'),
 	CustomPages: require(__dirname+'/custompages.js'),

@@ -169,7 +169,7 @@ async function wipe() {
 		await db.createCollection(name);
 	}
 
-	const { Boards, Posts, Captchas, Ratelimits, News, CustomPages,
+	const { Approval, Boards, Posts, Captchas, Ratelimits, News, CustomPages,
 		Accounts, Files, Stats, Modlogs, Filters, Bans, Bypass, Roles } = require(__dirname+'/db/');
 
 	//wipe db shit
@@ -188,6 +188,7 @@ async function wipe() {
 		Bypass.deleteAll(),
 		News.deleteAll(),
 		Filters.deleteAll(),
+		Approval.deleteAll()
 	]);
 
 	//add indexes - should profiled and changed at some point if necessary
@@ -196,6 +197,7 @@ async function wipe() {
 	await Boards.db.createIndex({tags: 1});
 	await Boards.db.createIndex({uri: 1});
 	await Boards.db.createIndex({lastPostTimestamp:1});
+	await Approval.db.dropIndexes();
 	await Roles.db.dropIndexes();
 	await Bans.db.dropIndexes();
 	await Captchas.db.dropIndexes();

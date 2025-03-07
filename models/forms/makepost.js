@@ -6,7 +6,7 @@ const { createHash, randomBytes } = require('crypto')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, Mongo = require(__dirname+'/../../db/db.js')
 	, Socketio = require(__dirname+'/../../lib/misc/socketio.js')
-	, { Stats, Posts, Boards, Files, Filters } = require(__dirname+'/../../db/')
+	, { Stats, Posts, Boards, Files, Approval, Filters } = require(__dirname+'/../../db/')
 	, cache = require(__dirname+'/../../lib/redis/redis.js')
 	, nameHandler = require(__dirname+'/../../lib/post/name.js')
 	, getFilterStrings = require(__dirname+'/../../lib/post/getfilterstrings.js')
@@ -34,7 +34,8 @@ const { createHash, randomBytes } = require('crypto')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
-	, FIELDS_TO_REPLACE = ['email', 'subject', 'message'];
+	, FIELDS_TO_REPLACE = ['email', 'subject', 'message']
+	, approvedTypes = require(__dirname+'/../../lib/approval/approvaltypes.js');
 
 module.exports = async (req, res) => {
 
@@ -42,7 +43,9 @@ module.exports = async (req, res) => {
 	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage, audioThumbnails,
 		dontStoreRawIps, globalLimits } = config.get;
 
-	//spam/flood check
+	//
+	// Spam/flood check
+	//
 	const flood = await spamCheck(req, res);
 	if (flood) {
 		deleteTempFiles(req).catch(console.error);
@@ -53,7 +56,7 @@ module.exports = async (req, res) => {
 		});
 	}
 
-	// check if this is responding to an existing thread
+	// Set redirect to board index in case of error
 	let redirect = `/${req.params.board}/`;
 	let salt = null;
 	let thread = null;
@@ -62,6 +65,10 @@ module.exports = async (req, res) => {
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
 		captchaMode, lockMode, allowedFileTypes, customFlags, geoFlags, fileR9KMode, messageR9KMode } = res.locals.board.settings;
+
+	//
+	// Check if country is blocked
+	//
 	if (!isStaffOrGlobal
 		// && !res.locals.permissions.get(Permissions.BYPASS_FILTERS) //TODO: new permission for "bypass blocks" or something
 		&& res.locals.country
@@ -73,6 +80,10 @@ module.exports = async (req, res) => {
 			'redirect': redirect
 		});
 	}
+
+	//
+	// Check if board/thread creation locked
+	//
 	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread
 		&& !isStaffOrGlobal) { //and not staff
 		await deleteTempFiles(req).catch(console.error);
@@ -82,6 +93,11 @@ module.exports = async (req, res) => {
 			'redirect': redirect
 		});
 	}
+
+
+	//
+	// Check if thread exists
+	//
 	if (req.body.thread) {
 		thread = await Posts.getPost(req.params.board, req.body.thread, true);
 		if (!thread || thread.thread != null) {
@@ -92,8 +108,14 @@ module.exports = async (req, res) => {
 				'redirect': redirect
 			});
 		}
+
+		// Set salt for IDs
 		salt = thread.salt;
+
+		// Redirect to thread on reply
 		redirect += `thread/${req.body.thread}.html`;
+
+		// If thread locked, delete reply
 		if (thread.locked && !isStaffOrGlobal) {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
@@ -102,7 +124,9 @@ module.exports = async (req, res) => {
 				'redirect': redirect
 			});
 		}
-		if (thread.replyposts >= replyLimit && !thread.cyclic) { //reply limit
+
+		// If thread reply limit reached, delete reply
+		if (thread.replyposts >= replyLimit && !thread.cyclic) {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
@@ -112,7 +136,9 @@ module.exports = async (req, res) => {
 		}
 	}
 
-	//filters
+	//
+	// Filters
+	//
 	if (!res.locals.permissions.get(Permissions.BYPASS_FILTERS)) {
 
 		//deconstruct global filter settings to differnt names, else they would conflict with the respective board-level setting
@@ -178,11 +204,14 @@ module.exports = async (req, res) => {
 		}
 	}
 
+
+	//
+	// File processing
+	//
 	let files = [];
-	// if we got a file
 	if (res.locals.numFiles > 0) {
 
-		//unique files check
+		// Unique file check
 		if ((req.body.thread && fileR9KMode === 1) || fileR9KMode === 2) {
 			const filesHashes = req.files.file.map(f => f.sha256);
 			const postWithExistingFiles = await Posts.checkExistingFiles(res.locals.board._id, (fileR9KMode === 2 ? null : req.body.thread), filesHashes);
@@ -205,7 +234,7 @@ module.exports = async (req, res) => {
 			}
 		}
 
-		//basic mime type check
+		// Fast mime type check
 		for (let i = 0; i < res.locals.numFiles; i++) {
 			if (!mimeTypes.allowed(req.files.file[i].mimetype, allowedFileTypes)) {
 				await deleteTempFiles(req).catch(console.error);
@@ -217,7 +246,7 @@ module.exports = async (req, res) => {
 			}
 		}
 
-		//validate mime type properly
+		// Slow proper mime type check
 		if (checkRealMimeTypes) {
 			for (let i = 0; i < res.locals.numFiles; i++) {
 				if (!(await mimeTypes.realMimeCheck(req.files.file[i]))) {
@@ -233,9 +262,20 @@ module.exports = async (req, res) => {
 			}
 		}
 
-		//upload, create thumbnails, get metadata, etc.
+		// upload, create thumbnails, get metadata, etc.
 		for (let i = 0; i < res.locals.numFiles; i++) {
 			const file = req.files.file[i];
+
+			if ((await Approval.isDenied(file.sha256)) === true) {
+				console.error('User tried to upload bad file');
+				deleteTempFiles(req).catch(console.error);
+				return dynamicResponse(req, res, 429, 'message', {
+					'title': __('Bad file'),
+					'message': __('You can not upload that file'),
+					'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
+				});
+			}
+
 			file.filename = file.sha256 + file.extension;
 
 			//get metadata
@@ -393,6 +433,49 @@ module.exports = async (req, res) => {
 	// because express middleware is autistic i need to do this
 	deleteTempFiles(req).catch(console.error);
 
+	//
+	// Media approval
+	//
+	if (files.length > 0) {
+		for (let i = 0; i < files.length; i++) {
+			const file = files[i];
+
+			// Skip approval stage if file already approved
+			if ((await Approval.isApproved(file.hash)) === true) {
+				continue;
+			}
+
+			const approvalMetadata = { 
+				...file, 
+				origin_ip: res.locals.ip,
+				user_id: res.locals.ip,
+				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
+			};
+
+			if (approvalMetadata.approved !== approvedTypes.APPROVED) {
+				// Delete file information from post
+				for (const key in file) {
+					delete file[key];
+				}
+
+				// Replace file with a temporary pendingapproval image
+				file.filename = 'pendingapproval.png';
+				file.originalFilename = 'pendingapproval.png';
+				file.mimetype = 'image/png';
+				file.hash = approvalMetadata.hash;
+				file.extension = '.png';
+				const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
+				file.geometry = imageDimensions;
+				file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
+			};
+
+			await Approval.insertOne(approvalMetadata);
+		}
+	}
+
+	//
+	// User ID, flag, and password
+	//
 	let userId = null;
 	if (!salt) {
 		//thread salt for IDs

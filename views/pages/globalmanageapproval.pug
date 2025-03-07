@@ -1,0 +1,23 @@
+extends ../layout.pug
+include ../mixins/media.pug
+
+block head
+    title #{__('Approval')}
+
+block content
+    h1.board-title #{__('Approval')}
+    br
+    hr(size=1)
+    h4.no-m-p #{__('Pending Approval')}:
+    if pending.length === 0
+        p #{__('No media pending.')}
+    else
+        for file in pending
+            form.approval-form(action='/forms/approval',method='POST',enctype='application/x-www-form-urlencoded')
+                //- input(type='hidden',name='finimal', value=true)
+                +media(file)
+                input(type='hidden',name='_csrf', value=csrf)
+                input(type='hidden',name='hash', value=`${file.hash}`)
+                input(type='submit',name='action', value='approve')
+                input(type='submit',name='action', value='deny')
+            hr(size=1)

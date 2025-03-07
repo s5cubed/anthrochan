@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = {
+	globalManageApproval: require(__dirname+'/approval.js'),
 	globalManageReports: require(__dirname+'/reports.js'),
 	globalManageBans: require(__dirname+'/bans.js'),
 	globalManageLogs: require(__dirname+'/logs.js'),

@@ -22,7 +22,7 @@ const express  = require('express')
 	, fileMiddlewares = require(__dirname+'/../lib/middleware/file/filemiddlewares.js')
 	, { setBoardLanguage, setQueryLanguage } = require(__dirname+'/../lib/middleware/locale/locale.js')
 //controllers
-	, { deleteBoardController, editBansController, appealController, globalActionController, twofactorController,
+	, { globalApprovalController, deleteBoardController, editBansController, appealController, globalActionController, twofactorController,
 		actionController, addCustomPageController, deleteCustomPageController, addNewsController,
 		editNewsController, deleteNewsController, uploadBannersController, deleteBannersController, addFlagsController,
 		deleteFlagsController, boardSettingsController, transferController, addAssetsController, deleteAssetsController,
@@ -43,6 +43,8 @@ router.post('/board/:board/actions', geoIp, processIp, useSession, sessionRefres
 router.post('/board/:board/modactions', geoIp, processIp, useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, banCheck, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), actionController.paramConverter, actionController.controller); //board manage page
 
+router.post('/approval', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), globalApprovalController.paramConverter, globalApprovalController.controller); // approve/deny media
 router.post('/global/actions', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), globalActionController.paramConverter, globalActionController.controller); //global manage page
 

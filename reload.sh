@@ -1,20 +1,41 @@
 #!/bin/bash
 
-# Determine environment
+# Default environment to development
 env="development"
-if [ "$1" == "production" ]; then
-    env="production"
-fi
 
-pm2 stop ecosystem.config.js
+# Check for the -p flag to set the environment to production
+while getopts "p" opt; do
+    case $opt in
+        p)
+            env="production"
+            ;;
+        *)
+            echo "Usage: $0 [-p]"
+            exit 1
+            ;;
+    esac
+done
 
-# if on server pull changes and update npm
+# Stop anthrochan server and flush logs
+pm2 stop all
+pm2 flush
+
+# In prod
 if [ "$env" == "production" ]; then
-    git pull
-    npm install
+    # Stop nginx
+    sudo systemctl stop nginx
+
+    # Pull new main branch
+    git pull || { echo "Git pull failed"; exit 1; }
+    npm install || { echo "NPM install failed"; exit 1; }
 fi
 
-gulp migrate && gulp
+gulp migrate && gulp || { echo "Gulp tasks failed"; exit 1; }
+# Start anthrochan server
 pm2 restart ecosystem.config.js --env $env
 
-echo "Commands executed successfully in $env environment."
+echo "Server successfully reloaded in $env environment."
+
+if [ "$env" == "development" ]; then
+    pm2 logs
+fi

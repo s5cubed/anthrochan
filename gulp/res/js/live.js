@@ -30,6 +30,28 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 	}
 
 	//add text before post-info to show posts deleted, moved, etc
+	const approvePost = (data) => {
+		console.log('got approve post message', data);
+		const anchor = document.getElementById(data.postId);
+		const postContainer = anchor.nextSibling;
+
+		let insertPoint = postContainer.nextSibling;
+		let insertPosition = 'beforeBegin';
+		if (!insertPoint) {
+			//No next sibling, this is the last post in a thread
+			insertPoint = postContainer.parentElement;
+			insertPosition = 'beforeEnd';
+		}
+		anchor.remove();
+		postContainer.remove();
+		newPost(data, {
+			nonotify: true, //should we notify of edits in open threads, maybe just for OP? idk
+			insertPoint,
+			insertPosition,
+		});
+	};
+
+	//add text before post-info to show posts deleted, moved, etc
 	const markPost = (data) => {
 		console.log('got mark post message', data);
 		const anchor = document.getElementById(data.postId);
@@ -329,6 +351,7 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 			});
 			socket.on('newPost', newPost);
 			socket.on('markPost', markPost);
+			socket.on('approvePost', approvePost);
 		} else {
 			//websocket not supported, update with polling to api
 			updateButton.removeAttribute('style');
