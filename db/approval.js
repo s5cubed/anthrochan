@@ -33,7 +33,10 @@ module.exports = {
 	},
 
 	getFileMetadata: async (filehash) => {
-		const file = await db.findOne({'_id': filehash});
+		const file = await db.findOne({
+			_id: filehash,
+			approved: approvalTypes.PENDING,
+		});
 		return file;
 	},
 
