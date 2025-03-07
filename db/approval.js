@@ -53,7 +53,8 @@ module.exports = {
 
 	denyAll: async (user_id) => {
 		const filter = {
-			user_id: user_id
+			user_id: user_id,
+			approved: approvalTypes.PENDING,
 		};
 
 		const update = {
