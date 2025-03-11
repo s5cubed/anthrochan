@@ -288,12 +288,29 @@ class postFormHandler {
 				}
 			}
 		} else {
-			postData = new URLSearchParams([...(new FormData(this.form))]);
+			let formData;
+			
+			const submitter = e.submitter;
+			if (submitter.id === 'approval-input') {
+				// make sure every checkbox is unchecked to only affect post button clicked in
+				document.querySelectorAll('.post-check').forEach(checkbox => checkbox.checked = false);
+				const post_check = submitter.closest('.post-container').querySelector('.post-check');
+				post_check.checked = true;
+				formData = new FormData(this.form);
+				post_check.checked = false;
+				formData.append('approve', true);
+				formData.append('file_moderation_status', submitter.name);
+				formData.append('file_moderation_filename', submitter.dataset.filename);
+			} else {
+				formData = new FormData(this.form);
+			}
+
+			postData = new URLSearchParams([...(formData)]);
 			if (captchaResponse) {
 				postData.set('captcha', captchaResponse);
 			}
 		}
-
+		
 		/* if it is a "minimal" form (used in framed bypases) or ticked the "edit" box in post actions,
 			dont preventDefault because we just want to use non-js form submission */
 		if (this.minimal
@@ -497,7 +514,6 @@ class postFormHandler {
 
 		//send the request
 		xhr.send(postData);
-
 	}
 
 	//forcefully update message box of form for character counter used e.g. in reset() because input event would not be fired
@@ -685,8 +701,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('settingsReady', () => {
 
-	const forms = Array.from(document.getElementsByTagName('form'))
-                  .filter(form => !form.classList.contains('approval-form'));
+	const forms = document.getElementsByTagName('form');
 
 	for (let i = 0; i < forms.length; i++) {
 		if (forms[i].method === 'post') {

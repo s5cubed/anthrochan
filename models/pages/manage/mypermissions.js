@@ -5,7 +5,7 @@ const { Permissions } = require(__dirname+'/../../../lib/permission/permissions.
 module.exports = async (req, res) => {
 
 	res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('managemypermissions', {
 			user: res.locals.user,
 			board: res.locals.board,

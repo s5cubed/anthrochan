@@ -11,6 +11,7 @@ module.exports = async (req, res, next) => {
 	const { forceActionTwofactor } = config.get;
 	let boardReportCountMap = {}; //map of board to open report count
 	let globalReportCount = 0; //number of open global reports
+	let globalApprovalCount = 0; // number of files pending approval
 	let boardPermissions; //map of board perms
 	let userBoards = [];
 
@@ -22,6 +23,12 @@ module.exports = async (req, res, next) => {
 			res.locals.user.staffBoards.length > 0 ? Boards.getStaffPerms(res.locals.user.staffBoards, res.locals.user.username) : null,
 			res.locals.permissions.get(Permissions.MANAGE_GLOBAL_GENERAL) ? Posts.getGlobalReportsCount() : 0,
 		]));
+	} catch (err) {
+		return next(err);
+	}
+
+	try {
+		globalApprovalCount = await Posts.getFilesPendingCount();
 	} catch (err) {
 		return next(err);
 	}
@@ -52,7 +59,7 @@ module.exports = async (req, res, next) => {
 	}
 
 	res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('account', {
 			csrf: req.csrfToken(),
 			user: res.locals.user,
@@ -60,6 +67,7 @@ module.exports = async (req, res, next) => {
 			boardPermissions,
 			boardReportCountMap,
 			globalReportCount,
+			globalApprovalCount,
 			forceActionTwofactor,
 		});
 

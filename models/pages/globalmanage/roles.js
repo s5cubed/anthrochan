@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
 
 	const allRoles = await Roles.find();
 
-	res.set('Cache-Control', 'private, max-age=5');
+	res.set('Cache-Control', 'private, max-age=1');
 
 	if (req.path.endsWith('.json')) {
 		res.json(allRoles);

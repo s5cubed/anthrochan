@@ -33,6 +33,11 @@ block content
 					a(href=`/globalmanage/reports.html`) #{__('Reports')}
 						if globalReportCount > 0
 							b  (#{globalReportCount})
+					|
+					|
+					a(href=`/globalmanage/approval.html`) #{__('Approvals')}
+						if globalApprovalCount > 0
+							b  (#{globalApprovalCount})
 				if permissions.get(Permissions.MANAGE_GLOBAL_BANS)
 					|   
 					a(href=`/globalmanage/bans.html`) #{__('Bans')}
@@ -58,13 +63,6 @@ block content
 					|   
 					a(href=`/globalmanage/settings.html`) #{__('Global Settings')}
 
-	if permissions.get(Permissions.MANAGE_BOARD_GENERAL)
-		hr(size=1)
-		h4.no-m-p #{__('General staff section')}
-		ul
-			li
-				a(href=`/globalmanage/approval.html`) #{__('Approval')}
-	
 	if user.ownedBoards && user.ownedBoards.length > 0
 		hr(size=1)
 		h4.no-m-p #{__('Boards you own')}:

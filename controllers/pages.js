@@ -95,7 +95,7 @@ router.get('/:board/manage/editfilter/:filterid([a-f0-9]{24}).html', useSession,
 
 //global manage pages
 router.get('/globalmanage/approval.html', useSession, sessionRefresh, isLoggedIn, calcPerms,
-	hasPerms.one(Permissions.MANAGE_BOARD_GENERAL), csrf, globalManageApproval);
+	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), csrf, globalManageApproval);
 router.get('/globalmanage/reports.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,
 	hasPerms.one(Permissions.MANAGE_GLOBAL_GENERAL), csrf, globalManageReports);
 router.get('/globalmanage/recent.(html|json)', useSession, sessionRefresh, isLoggedIn, calcPerms,

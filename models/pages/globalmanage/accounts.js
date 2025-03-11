@@ -40,7 +40,7 @@ module.exports = async (req, res, next) => {
 	}
 
 	res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('globalmanageaccounts', {
 			csrf: req.csrfToken(),
 			permissions: res.locals.permissions,

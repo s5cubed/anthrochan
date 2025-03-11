@@ -1,7 +1,6 @@
 'use strict';
 
 module.exports = {
-	globalApprovalController: require(__dirname+'/globalapproval.js'),
 	deleteBoardController: require(__dirname+'/deleteboard.js'),
 	editBansController: require(__dirname+'/editbans.js'),
 	appealController: require(__dirname+'/appeal.js'),

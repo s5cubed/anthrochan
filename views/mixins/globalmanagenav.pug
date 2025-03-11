@@ -4,6 +4,9 @@ mixin globalmanagenav(selected, upLevel)
 			a(href=`${upLevel ? '../' : ''}recent.html` class=(selected === 'recent' ? 'bold' : '')) [#{__('Recent')}]
 			|  
 			a(href=`${upLevel ? '../' : ''}reports.html` class=(selected === 'reports' ? 'bold' : '')) [#{__('Reports')}]
+			|
+			|
+			a(href=`/globalmanage/approval.html` class=(selected === 'approvals' ? 'bold' : '')) [#{__('Approvals')}]
 		if permissions.get(Permissions.MANAGE_GLOBAL_BANS)
 			|  
 			a(href=`${upLevel ? '../' : ''}bans.html` class=(selected === 'bans' ? 'bold' : '')) [#{__('Bans')}]

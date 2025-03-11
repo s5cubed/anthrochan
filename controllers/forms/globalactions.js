@@ -43,7 +43,7 @@ module.exports = {
 			{ result: lengthBody(req.body.log_message, 0, globalLimits.fieldLength.log_message), expected: false, error: __('Modlog message must be %s characters or less', globalLimits.fieldLength.log_message) },
 		]);
 
-		//return the errors
+		// return the errors
 		if (errors.length > 0) {
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
@@ -52,7 +52,7 @@ module.exports = {
 			});
 		}
 
-		//get posts with global ids only
+		// get posts with global ids only
 		try {
 			res.locals.posts = await Posts.globalGetPosts(req.body.globalcheckedposts, true);
 		} catch (err) {

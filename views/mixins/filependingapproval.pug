@@ -1,0 +1,11 @@
+mixin filependingapproval(catalog=false, postURL=null, post=null, small=false)
+    -filename = '/file/file-pending-approval.gif'
+    -size = 200
+    if catalog
+        .post-file-src
+            a(href=`${postURL}#${post.postId}`)
+            img.catalog-thumb(class=(small?'small':'') src=filename width=size height=size loading='lazy')
+    else 
+        .post-file-src.file-pending-approval(data-type='image' data-attachment='false')
+            a(target='_blank' href=filename)
+            img.file-thumb(src=filename height=size width=size loading='lazy')

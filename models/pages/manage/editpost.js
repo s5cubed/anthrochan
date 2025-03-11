@@ -3,7 +3,7 @@
 module.exports = async (req, res) => {
 
 	return res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('editpost', {
 			'csrf': req.csrfToken(),
 			'post': res.locals.post,

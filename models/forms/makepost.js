@@ -6,7 +6,7 @@ const { createHash, randomBytes } = require('crypto')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, Mongo = require(__dirname+'/../../db/db.js')
 	, Socketio = require(__dirname+'/../../lib/misc/socketio.js')
-	, { Stats, Posts, Boards, Files, Approval, Filters } = require(__dirname+'/../../db/')
+	, { Stats, Posts, Boards, Files, Filters } = require(__dirname+'/../../db/')
 	, cache = require(__dirname+'/../../lib/redis/redis.js')
 	, nameHandler = require(__dirname+'/../../lib/post/name.js')
 	, getFilterStrings = require(__dirname+'/../../lib/post/getfilterstrings.js')
@@ -34,14 +34,15 @@ const { createHash, randomBytes } = require('crypto')
 	, buildQueue = require(__dirname+'/../../lib/build/queue.js')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, { buildThread } = require(__dirname+'/../../lib/build/tasks.js')
-	, FIELDS_TO_REPLACE = ['email', 'subject', 'message']
-	, approvedTypes = require(__dirname+'/../../lib/approval/approvaltypes.js');
+	, FIELDS_TO_REPLACE = ['email', 'subject', 'message'];
 
 module.exports = async (req, res) => {
 
 	const { __ } = res.locals;
 	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage, audioThumbnails,
 		dontStoreRawIps, globalLimits } = config.get;
+
+	const user_uuid = res.locals.ip.raw;
 
 	//
 	// Spam/flood check
@@ -61,6 +62,7 @@ module.exports = async (req, res) => {
 	let salt = null;
 	let thread = null;
 	const isStaffOrGlobal = res.locals.permissions.hasAny(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_BOARD_GENERAL);
+	const isAdmin = res.locals.permissions.hasAny(Permissions.VIEW_RAW_IP);
 	const { blockedCountries, threadLimit, ids, userPostSpoiler,
 		pphTrigger, tphTrigger, tphTriggerAction, pphTriggerAction,
 		sageOnlyEmail, forceAnon, replyLimit, disableReplySubject,
@@ -85,7 +87,7 @@ module.exports = async (req, res) => {
 	// Check if board/thread creation locked
 	//
 	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread
-		&& !isStaffOrGlobal) { //and not staff
+		&& !isAdmin) { // and not admin
 		await deleteTempFiles(req).catch(console.error);
 		return dynamicResponse(req, res, 400, 'message', {
 			'title': __('Bad request'),
@@ -93,7 +95,6 @@ module.exports = async (req, res) => {
 			'redirect': redirect
 		});
 	}
-
 
 	//
 	// Check if thread exists
@@ -204,7 +205,6 @@ module.exports = async (req, res) => {
 		}
 	}
 
-
 	//
 	// File processing
 	//
@@ -266,15 +266,16 @@ module.exports = async (req, res) => {
 		for (let i = 0; i < res.locals.numFiles; i++) {
 			const file = req.files.file[i];
 
-			if ((await Approval.isDenied(file.sha256)) === true) {
-				console.error('User tried to upload bad file');
-				deleteTempFiles(req).catch(console.error);
-				return dynamicResponse(req, res, 429, 'message', {
-					'title': __('Bad file'),
-					'message': __('You can not upload that file'),
-					'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
-				});
-			}
+			// Check if file approved
+			// if ((await Approval.isDenied(file.sha256)) === true) {
+			// 	console.error('User tried to upload bad file');
+			// 	deleteTempFiles(req).catch(console.error);
+			// 	return dynamicResponse(req, res, 429, 'message', {
+			// 		'title': __('Bad file'),
+			// 		'message': __('You can not upload that file'),
+			// 		'redirect': `/${req.params.board}${req.body.thread ? '/thread/' + req.body.thread + '.html' : ''}`
+			// 	});
+			// }
 
 			file.filename = file.sha256 + file.extension;
 
@@ -436,40 +437,48 @@ module.exports = async (req, res) => {
 	//
 	// Media approval
 	//
+	const trusted = isStaffOrGlobal ? true : false;
+
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
 
-			// Skip approval stage if file already approved
-			if ((await Approval.isApproved(file.hash)) === true) {
-				continue;
-			}
+			file.approved = trusted;
 
-			const approvalMetadata = { 
-				...file, 
-				origin_ip: res.locals.ip,
-				user_id: res.locals.ip,
-				approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
-			};
+			// // Skip approval stage if file already approved
+			// if ((await Approval.isApproved(file.hash)) === true) {
+			// 	continue;
+			// }
 
-			if (approvalMetadata.approved !== approvedTypes.APPROVED) {
-				// Delete file information from post
-				for (const key in file) {
-					delete file[key];
-				}
+			// const approvalMetadata = { 
+			// 	...file, 
+			// 	origin_ip: res.locals.ip,
+			// 	user_id: res.locals.ip,
+			// 	approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
+			// };
 
-				// Replace file with a temporary pendingapproval image
-				file.filename = 'pendingapproval.png';
-				file.originalFilename = 'pendingapproval.png';
-				file.mimetype = 'image/png';
-				file.hash = approvalMetadata.hash;
-				file.extension = '.png';
-				const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
-				file.geometry = imageDimensions;
-				file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
-			};
+			// if (approvalMetadata.approved !== approvedTypes.APPROVED) {
+			// 	// Delete file information from post
+			// 	for (const key in file) {
+			// 		delete file[key];
+			// 	}
 
-			await Approval.insertOne(approvalMetadata);
+			// 	// Replace file with a temporary pendingapproval image
+			// 	file.filename = 'pendingapproval.png';
+			// 	file.originalFilename = 'pendingapproval.png';
+			// 	file.mimetype = 'image/png';
+			// 	file.hash = approvalMetadata.hash;
+			// 	file.extension = '.png';
+			// 	const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
+			// 	file.geometry = imageDimensions;
+			// 	file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
+			// };
+
+			// await Approval.insertOne(approvalMetadata);
+
+			// TODO: user trust system
+			// const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
+			// await Files.updateModerationStatus(file.filename, file_moderation_status);
 		}
 	}
 
@@ -561,6 +570,7 @@ module.exports = async (req, res) => {
 		'banmessage': null,
 		userId,
 		'ip': res.locals.ip,
+		user_uuid: user_uuid,
 		files,
 		'reports': [],
 		'globalreports': [],

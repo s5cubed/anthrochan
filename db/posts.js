@@ -4,6 +4,8 @@ const Mongo = require(__dirname+'/db.js')
 	, { isIP } = require('net')
 	, { DAY } = require(__dirname+'/../lib/converter/timeutils.js')
 	, Boards = require(__dirname+'/boards.js')
+	// , Files = require(__dirname+'/files.js')
+	// , approvalTypes = require(__dirname+'/../lib/approval/approvaltypes.js')
 	, Stats = require(__dirname+'/stats.js')
 	, { Permissions } = require(__dirname+'/../lib/permission/permissions.js')
 	, { randomBytes } = require('crypto')
@@ -435,6 +437,51 @@ module.exports = {
 				'thread': 1,
 			}
 		}).limit(quoteLimit).toArray();
+	},
+
+	getFilesPending: () => {
+		const query = {
+			'files.approved': false,
+		};
+
+		return db.find(query).toArray();
+	},
+
+	getFilesPendingCount: async () => {
+		const result = await db.aggregate([
+			{ $unwind: '$files' },
+			{ $match: { 'files.approved': false } },
+			{ $count: 'total_unapproved_files' }
+		]).toArray();
+
+		return result[0]?.total_unapproved_files || 0;
+	},
+
+	approveFiles: async (posts) => {
+		const postsIds = posts.map(post => post._id);
+		await db.updateMany(
+			{ _id: { $in: postsIds } },  // Find all posts with matching _id
+			{ $set: { 'files.$[].approved': true } }  // Update all files in the array
+		);
+		// TODO trusted user system
+		// const files = posts.map(post => post.filename); // this doesn't work btw
+		// await Files.db.updateMany(
+			// { _id: { $in: files }},
+			// { $set: { 'moderation_status': approvalTypes.APPROVED }}
+		// );
+	},
+
+	approveFile: async (filename) => {
+		await db.updateMany(
+			{ 'files': { '$elemMatch': { 'filename': filename, 'approved': false } } },
+			{ '$set': { 'files.$[elem].approved': true } },
+			{ 'arrayFilters': [{ 'elem.filename': filename, 'elem.approved': false }] }
+		);
+		// TODO trusted user system
+		// await Files.db.updateOne(
+		// 	{ _id: filename },
+		// 	{ $set : { 'moderation_status': approvalTypes.APPROVED}}
+		// );
 	},
 
 	//takes array "ids" of mongo ids to get posts from any board

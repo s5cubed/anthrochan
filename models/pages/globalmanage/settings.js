@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
 	const { forceActionTwofactor } = config.get;
 
 	res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('globalmanagesettings', {
 			csrf: req.csrfToken(),
 			settings: config.get,

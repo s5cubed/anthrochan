@@ -17,7 +17,7 @@ module.exports = async (req, res, next) => {
 	//accountPermissions.applyInheritance();
 
 	res
-		.set('Cache-Control', 'private, max-age=5')
+		.set('Cache-Control', 'private, max-age=1')
 		.render('editaccount', {
 			csrf: req.csrfToken(),
 			board: res.locals.board,

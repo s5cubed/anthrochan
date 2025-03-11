@@ -13,6 +13,7 @@ const { Posts, Boards, Modlogs } = require(__dirname+'/../../db/')
 	, reportPosts = require(__dirname+'/reportpost.js')
 	, dismissReports = require(__dirname+'/dismissreport.js')
 	, movePosts = require(__dirname+'/moveposts.js')
+	, moderateFiles = require(__dirname+'/moderatefiles.js')
 	, { remove } = require('fs-extra')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
 	, ModlogActions = require(__dirname+'/../../lib/input/modlogactions.js')
@@ -66,6 +67,20 @@ module.exports = async (req, res, next) => {
 		res.locals.posts = passwordPosts;
 	}
 
+	const messages = [];
+	const modlogActions = [];
+	const combinedQuery = {};
+	let recalculateThreadMetadata = false;
+
+	// handle approvals first, may lead to ban and/or deletions later
+	if (req.body.approve) {
+		const { message, log_message } = await moderateFiles(req, res);
+
+		req.body.log_message = log_message;
+		modlogActions.push(message);
+		messages.push(message);
+	}
+
 	const deleting = req.body.delete || req.body.delete_ip_board || req.body.delete_ip_global || req.body.delete_ip_thread;
 
 	//affected boards, their threads, and how many pages each one has before the actions
@@ -83,12 +98,7 @@ module.exports = async (req, res, next) => {
 		}
 	}
 
-	const messages = [];
-	const modlogActions = [];
-	const combinedQuery = {};
-	let recalculateThreadMetadata = false;
-
-	//handle bans, independent of other actions
+	// handle bans, independent of other actions
 	if (req.body.ban || req.body.global_ban || req.body.report_ban || req.body.global_report_ban) {
 		const { message, action, query } = await banPoster(req, res, next);
 		if (req.body.ban) {
@@ -598,7 +608,7 @@ module.exports = async (req, res, next) => {
 						}
 					});
 
-				} else if (req.body.spoiler || req.body.ban || req.body.global_ban) {
+				} else if (req.body.approve || req.body.spoiler || req.body.ban || req.body.global_ban) {
 
 					buildQueue.push({
 						'task': 'buildBoardMultiple',

@@ -1,0 +1,5 @@
+mixin actionfooter_fileapproval(filename)
+	.approval-button-container(filename)
+		input.nsfw-button(id='approval-input' type='submit' name='nsfw' value='N', data-filename=filename)
+		input.approve-button(id='approval-input' type='submit' name='approve' value='A', data-filename=filename)
+		input.illegal-button(id='approval-input' type='submit' name='illegal' value='I', data-filename=filename)

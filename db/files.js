@@ -2,6 +2,7 @@
 
 const Mongo = require(__dirname+'/db.js')
 	, formatSize = require(__dirname+'/../lib/converter/formatsize.js')
+	// , approvalTypes = require(__dirname+'/../lib/approval/approvaltypes.js')
 	, db = Mongo.db.collection('files');
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
 
 	increment: (file) => {
 		return db.updateOne({
-			'_id': file.filename
+			_id: file.filename,
 		}, {
 			'$inc': {
 				'count': 1
@@ -19,7 +20,7 @@ module.exports = {
 				'exts': file.thumbextension,
 			},
 			'$setOnInsert': {
-				'size': file.size
+				'size': file.size,
 			}
 		}, {
 			'upsert': true
