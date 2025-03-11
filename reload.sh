@@ -22,6 +22,9 @@ pm2 flush
 
 # In prod
 if [ "$env" == "production" ]; then
+    # Stop nginx
+    sudo systemctl stop nginx
+
     # Pull new main branch
     git pull || { echo "Git pull failed"; exit 1; }
     npm install || { echo "NPM install failed"; exit 1; }
