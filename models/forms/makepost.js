@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
 		redirect += `thread/${req.body.thread}.html`;
 
 		// If thread locked, delete reply
-		if (thread.locked && !isStaffOrGlobal) {
+		if (thread.locked && !isAdmin) {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Bad request'),
