@@ -30,7 +30,8 @@ const express  = require('express')
 		deleteAccountsController, editAccountController, addFilterController, editFilterController, deleteFilterController, 
 		globalSettingsController, createBoardController, makePostController, addStaffController, deleteStaffController, 
 		editStaffController, editCustomPageController, editPostController, editRoleController, newCaptchaForm, 
-		blockBypassForm, logoutForm, deleteSessionsController, globalClearController } = require(__dirname+'/forms/index.js');
+		blockBypassForm, logoutForm, deleteSessionsController, globalClearController, addTrustedController,
+		deleteTrustedController } = require(__dirname+'/forms/index.js');
 
 //make new post
 router.post('/board/:board/post', geoIp, processIp, useSession, sessionRefresh, Boards.exists, setBoardLanguage, calcPerms, banCheck, fileMiddlewares.posts,
@@ -50,7 +51,7 @@ router.post('/global/actions', geoIp, processIp, useSession, sessionRefresh, csr
 router.post('/appeal', geoIp, processIp, useSession, sessionRefresh, appealController.paramConverter, verifyCaptcha, appealController.controller);
 //edit post
 router.post('/editpost', geoIp, processIp, useSession, sessionRefresh, csrf, editPostController.paramConverter, Boards.bodyExists, setBoardLanguage, calcPerms,
-	hasPerms.any(Permissions.MANAGE_GLOBAL_GENERAL, Permissions.MANAGE_BOARD_OWNER), editPostController.controller);
+	hasPerms.one(Permissions.VIEW_RAW_IP), editPostController.controller);
 
 //board management forms
 router.post('/board/:board/transfer', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
@@ -93,6 +94,10 @@ router.post('/board/:board/editstaff', useSession, sessionRefresh, csrf, Boards.
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), editStaffController.paramConverter, editStaffController.controller); //edit staff permission
 router.post('/board/:board/deletestaff', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
 	hasPerms.one(Permissions.MANAGE_BOARD_STAFF), deleteStaffController.paramConverter, deleteStaffController.controller); //delete board staff
+router.post('/board/:board/addtrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), addTrustedController.paramConverter, addTrustedController.controller); //edit staff permission
+router.post('/board/:board/deletetrusted', useSession, sessionRefresh, csrf, Boards.exists, setBoardLanguage, calcPerms, isLoggedIn,
+	hasPerms.one(Permissions.MANAGE_BOARD_TRUSTED), deleteTrustedController.paramConverter, deleteTrustedController.controller); //edit staff permission
 
 //global management forms
 router.post('/global/editbans', geoIp, processIp, useSession, sessionRefresh, csrf, calcPerms, isLoggedIn,

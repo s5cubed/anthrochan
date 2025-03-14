@@ -306,8 +306,8 @@ module.exports = () => describe('login and create test board', () => {
 			roleid: anonRole._id,
 			CREATE_BOARD: '2',
 			CREATE_ACCOUNT: '3',
-			BYPASS_CAPTCHA: '8',
-			USE_MARKDOWN: '35',
+			BYPASS_CAPTCHA: '14',
+			USE_MARKDOWN_GENERAL: '50',
 		});
 		const response = await fetch('http://localhost/forms/global/editrole', {
 			headers: {

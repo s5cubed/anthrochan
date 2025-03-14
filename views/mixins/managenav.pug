@@ -33,3 +33,8 @@ mixin managenav(selected, upLevel)
 		if permissions.get(Permissions.MANAGE_BOARD_STAFF)
 			|  
 			a(href=`${upLevel ? '../' : ''}staff.html` class=(selected === 'staff' ? 'bold' : '')) [#{__('Staff')}]
+		if permissions.get(Permissions.MANAGE_BOARD_TRUSTED)
+			|
+			|
+			a(href=`${upLevel ? '../' : ''}trusted.html` class=(selected === 'trusted' ? 'bold' : '')) [#{__('Trusted')}]
+

@@ -24,6 +24,7 @@ module.exports = async (req, res, next) => {
 			reports,
 			permissions: res.locals.permissions,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP),
+			viewRawAccount: res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT),
 		});
 	}
 

@@ -17,5 +17,6 @@ module.exports = {
 	editFilter: require(__dirname+'/editfilter.js'),
 	editPost: require(__dirname+'/editpost.js'),
 	manageStaff: require(__dirname+'/staff.js'),
+	manageTrusted: require(__dirname+'/trusted.js'),
 	editStaff: require(__dirname+'/editstaff.js'),
 };

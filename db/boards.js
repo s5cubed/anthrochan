@@ -110,6 +110,21 @@ module.exports = {
 		cache.del(`board:${board}`);
 		return res;
 	},
+	
+	addTrusted: async (board, username) => {
+		const update = {
+			'$set': {
+				[`trusted.${username}`]: {
+					'addedDate': new Date(),
+				},
+			},
+		};
+		const res = db.updateOne({
+			'_id': board,
+		}, update);
+		cache.del(`board:${board}`);
+		return res;
+	},
 
 	removeStaff: (board, usernames) => {
 		cache.del(`board:${board}`);
@@ -124,6 +139,37 @@ module.exports = {
 				'$unset': unsetObject,
 			}
 		);
+	},
+	
+	removeTrusted: (board, usernames) => {
+		cache.del(`board:${board}`);
+		const unsetObject = usernames.reduce((acc, username) => {
+			acc[`trusted.${username}`] = '';
+			return acc;
+		}, {});
+		return db.updateOne(
+			{
+				'_id': board,
+			}, {
+				'$unset': unsetObject,
+			}
+		);
+	},
+	
+	removeTrustedFromAll: async (usernames) => {
+		// clear all board cache
+		const boards = (await db.find().toArray()).map(board => board._id);
+		if (boards && boards.length > 0) {
+			for (let i = 0, len = boards.length; i < len; i++) {
+				const board = boards[i];
+				cache.del(`board:${board}`);
+			}
+		}
+		const unsetObject = usernames.reduce((acc, username) => {
+			acc[`trusted.${username}`] = '';
+			return acc;
+		}, {});
+		return db.updateMany({}, { '$unset': unsetObject,});
 	},
 
 	setStaffPermissions: (board, username, permissions, setOwner = false) => {

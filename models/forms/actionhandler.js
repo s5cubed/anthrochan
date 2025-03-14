@@ -2,6 +2,7 @@
 
 const { Posts, Boards, Modlogs } = require(__dirname+'/../../db/')
 	, Mongo = require(__dirname+'/../../db/db.js')
+	, untrustPoster = require(__dirname+'/untrustposter.js')
 	, banPoster = require(__dirname+'/banposter.js')
 	, deletePosts = require(__dirname+'/deletepost.js')
 	, spoilerPosts = require(__dirname+'/spoilerpost.js')
@@ -96,6 +97,13 @@ module.exports = async (req, res, next) => {
 		if (threadRefMatch && boardThreadMap[req.params.board].directThreads.has(+threadRefMatch[1])) {
 			redirect = `/${req.params.board}/${req.path.endsWith('modactions') ? 'manage/' : ''}index.html`;
 		}
+	}
+	
+	// handle trust
+	if (res.locals.board && req.body.untrust) {
+		const { message } = await untrustPoster(req, res, next);	
+		modlogActions.push(ModlogActions.UNTRUST_USER);
+		messages.push(message);
 	}
 
 	// handle bans, independent of other actions

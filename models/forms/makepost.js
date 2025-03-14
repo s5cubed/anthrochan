@@ -42,8 +42,6 @@ module.exports = async (req, res) => {
 	const { checkRealMimeTypes, thumbSize, thumbExtension, videoThumbPercentage, audioThumbnails,
 		dontStoreRawIps, globalLimits } = config.get;
 
-	const user_uuid = res.locals.ip.raw;
-
 	//
 	// Spam/flood check
 	//
@@ -435,50 +433,14 @@ module.exports = async (req, res) => {
 	deleteTempFiles(req).catch(console.error);
 
 	//
-	// Media approval
+	// File approval
 	//
-	const trusted = isStaffOrGlobal ? true : false;
+	const bypassFileApproval = res.locals.permissions.hasAny(Permissions.BYPASS_FILE_APPROVAL);
 
 	if (files.length > 0) {
 		for (let i = 0; i < files.length; i++) {
 			const file = files[i];
-
-			file.approved = trusted;
-
-			// // Skip approval stage if file already approved
-			// if ((await Approval.isApproved(file.hash)) === true) {
-			// 	continue;
-			// }
-
-			// const approvalMetadata = { 
-			// 	...file, 
-			// 	origin_ip: res.locals.ip,
-			// 	user_id: res.locals.ip,
-			// 	approved: isStaffOrGlobal ? approvedTypes.APPROVED : approvedTypes.PENDING,
-			// };
-
-			// if (approvalMetadata.approved !== approvedTypes.APPROVED) {
-			// 	// Delete file information from post
-			// 	for (const key in file) {
-			// 		delete file[key];
-			// 	}
-
-			// 	// Replace file with a temporary pendingapproval image
-			// 	file.filename = 'pendingapproval.png';
-			// 	file.originalFilename = 'pendingapproval.png';
-			// 	file.mimetype = 'image/png';
-			// 	file.hash = approvalMetadata.hash;
-			// 	file.extension = '.png';
-			// 	const imageDimensions = await getDimensions('pendingapproval.png', 'file', false);
-			// 	file.geometry = imageDimensions;
-			// 	file.geometryString = `${imageDimensions.width}x${imageDimensions.height}`;
-			// };
-
-			// await Approval.insertOne(approvalMetadata);
-
-			// TODO: user trust system
-			// const file_moderation_status = file.approved ? approvalTypes.APPROVED : approvalTypes.PENDING;
-			// await Files.updateModerationStatus(file.filename, file_moderation_status);
+			file.approved = bypassFileApproval;
 		}
 	}
 
@@ -570,13 +532,13 @@ module.exports = async (req, res) => {
 		'banmessage': null,
 		userId,
 		'ip': res.locals.ip,
-		user_uuid: user_uuid,
 		files,
 		'reports': [],
 		'globalreports': [],
 		quotes, //posts this post replies to
 		crossquotes, //quotes to other threads in same board
 		'backlinks': [], //posts replying to this post
+		account: res.locals.user ? res.locals.user.username : null,
 	};
 
 	if (!req.body.thread) {
@@ -737,13 +699,14 @@ module.exports = async (req, res) => {
 		Socketio.emitRoom(`${res.locals.board._id}-${data.thread}`, 'newPost', projectedPost);
 	}
 	const { raw, cloak, type } = data.ip;
+	const { rawAccount, cloakAccount } = { rawAccount: data.account, cloakAccount: 'Account Holder' };
 	//but emit it to manage pages because they need to get all posts through socket including thread
-	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { cloak, raw: null, type } });
-	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { cloak, raw: null, type } });
+	Socketio.emitRoom('globalmanage-recent-hashed', 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: cloakAccount });
+	Socketio.emitRoom(`${res.locals.board._id}-manage-recent-hashed`, 'newPost', { ...projectedPost, ip: { cloak, raw: null, type }, account: cloakAccount });
 	if (!dontStoreRawIps) {
         //no need to emit to these rooms if raw IPs are not stored
-		Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { cloak, raw, type } });
-		Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { cloak, raw, type } });
+		Socketio.emitRoom('globalmanage-recent-raw', 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: rawAccount });
+		Socketio.emitRoom(`${res.locals.board._id}-manage-recent-raw`, 'newPost', { ...projectedPost, ip: { cloak, raw, type }, account: rawAccount });
 	}
 
 	//now add other pages to be built in background

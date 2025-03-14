@@ -1,7 +1,7 @@
 {
-  "name": "jschan",
-  "version": "1.7.0",
-  "migrateVersion": "1.7.4",
+  "name": "anthrochan",
+  "version": "1.7.5",
+  "migrateVersion": "1.7.5",
   "description": "",
   "main": "server.js",
   "dependencies": {
@@ -75,6 +75,6 @@
     "start": "pm2 start ecosystem.config.js --env production",
     "start-dev": "pm2 start ecosystem.config.js --env development"
   },
-  "author": "Thomas Lynch (fatchan) <tom@69420.me>",
+  "author": "anthrofoo <anthrofoo@mailfence.com>",
   "license": "AGPL-3.0-only"
 }

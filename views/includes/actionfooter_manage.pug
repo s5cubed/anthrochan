@@ -1,38 +1,39 @@
 details.toggle-label#actionform
 	summary.collapse#action-menu #{__('Show Post Actions')}
 	.actions 
+		include ./modmacros.pug
 		h4.no-m-p #{__('Moderate')}:
 		.row.wrap
 			.col.mr-5
 				label
-					input.post-check(type='checkbox', name='delete' value='1')
+					input.post-check(id='deletecheck', type='checkbox', name='delete' value='1')
 					| #{__('Delete Posts')}
-				label
+				//- label
 					input.post-check(type='checkbox', name='unlink_file' value='1')
 					| #{__('Unlink Files')}
 				label
-					input.post-check(type='checkbox', name='delete_file' value='1')
+					input.post-check(id='deletefilecheck', type='checkbox', name='delete_file' value='1')
 					| #{__('Delete Files')}
 				label
-					input.post-check(type='checkbox', name='delete_ip_thread' value='1')
+					input.post-check(id='deleteipthreadcheck', type='checkbox', name='delete_ip_thread' value='1')
 					| #{__('Delete from IP in thread')}
 				label
-					input.post-check(type='checkbox', name='delete_ip_board' value='1')
+					input.post-check(id='deleteipboardcheck', type='checkbox', name='delete_ip_board' value='1')
 					| #{__('Delete from IP on board')}
 				label
-					input.post-check(type='checkbox', name='delete_ip_global' value='1')
+					input.post-check(id='deleteipglobalcheck', type='checkbox', name='delete_ip_global' value='1')
 					| #{__('Delete from IP globally')}
 				label
-					input.post-check(type='checkbox', name='approve' value='1')
+					input.post-check(id='approvecheck', type='checkbox', name='approve' value='1')
 					| #{__('Approve Files')}
 				label
-					input.post-check(type='checkbox', name='spoiler' value='1')
+					input.post-check(id='spoilercheck', type='checkbox', name='spoiler' value='1')
 					| #{__('Spoiler Files')}
 				label
-					input.post-check(type='checkbox', name='dismiss' value='1')
+					input.post-check(id='dismisscheck', type='checkbox', name='dismiss' value='1')
 					| #{__('Dismiss Reports')}
 				label
-					input.post-check(type='checkbox', name='global_report' value='1')
+					input.post-check(id='globalreportcheck', type='checkbox', name='global_report' value='1')
 					| #{__('Global Report')}
 				label
 					input#report(type='text', name='report_reason', placeholder=__('Report reason') autocomplete='off')
@@ -41,41 +42,41 @@ details.toggle-label#actionform
 					| #{__('Move')}
 				.row
 					label.mr-1
-						input(type='text', name='move_to_board', placeholder=__('Board') autocomplete='off')
+						input(id='movetoboardtext', type='text', name='move_to_board', placeholder=__('Board') autocomplete='off')
 					label
-						input(type='number', name='move_to_thread', placeholder=__('Thread No.') autocomplete='off')
+						input(id='movetothreadnumber', type='number', name='move_to_thread', placeholder=__('Thread No.') autocomplete='off')
 			.col.mr-5
 				label
-					input.post-check(type='checkbox', name='report_ban' value='1')
+					input.post-check(id='reportbancheck', type='checkbox', name='report_ban' value='1')
 					| #{__('Ban Reporters')}
 				label
-					input.post-check(type='checkbox', name='ban' value='1')
+					input.post-check(id='bancheck', type='checkbox', name='ban' value='1')
 					| #{__('Ban Poster')}
 				label
-					input.post-check(type='checkbox', name='global_ban' value='1')
+					input.post-check(id='globalbancheck', type='checkbox', name='global_ban' value='1')
 					| #{__('Global Ban Poster')}
 				label
-					input.post-check(type='checkbox', name='ban_q' value='1')
+					input.post-check(id='narrowrangecheck', type='checkbox', name='ban_q' value='1')
 					| #{__('Narrow Range')}
 				label
-					input.post-check(type='checkbox', name='ban_h' value='1')
+					input.post-check(id='widerangecheck', type='checkbox', name='ban_h' value='1')
 					| #{__('Wide Range')}
 				label
-					input.post-check(type='checkbox', name='no_appeal' value='1')
+					input.post-check(id='noappealcheck', type='checkbox', name='no_appeal' value='1')
 					| #{__('Non-appealable Ban')}
 				label
-					input.post-check(type='checkbox', name='preserve_post' value='1')
+					input.post-check(id='preservepostcheck', type='checkbox', name='preserve_post' value='1')
 					| #{__('Show Post In Ban')}
 				label
-					input.post-check(type='checkbox', name='hide_name' value='1')
+					input.post-check(id='hidenamecheck', type='checkbox', name='hide_name' value='1')
 					| #{__('Hide Username In Modlog')}
 				label
-					input(type='text', name='ban_reason', placeholder=__('Ban reason') autocomplete='off')
+					input(id='banreasontext', type='text', name='ban_reason', placeholder=__('Ban reason') autocomplete='off')
 				label
-					input(type='text', name='ban_duration', placeholder=__('Ban duration e.g. 7d') autocomplete='off')
+					input(id='bandurationtext', type='text', name='ban_duration', placeholder=__('Ban duration e.g. 7d') autocomplete='off')
 				label
-					input(type='text', name='log_message', placeholder=__('Modlog message') autocomplete='off')
-			.col
+					input(id='logmessagetext', type='text', name='log_message', placeholder=__('Modlog message') autocomplete='off')
+			.col.mr-5
 				label
 					input.post-check(type='checkbox', name='edit' value='1')
 					| #{__('Edit Post')}
@@ -90,4 +91,11 @@ details.toggle-label#actionform
 				label
 					input.post-check(type='checkbox', name='cyclic' value='1')
 					| #{__('Toggle Cycle')}
+			.col.mr-5
+				label
+					input.post-check(id='untrustcheck', type='checkbox', name='untrust', value='1')
+					| #{__('Untrust User')}
+				//- label
+					input.post-check(id='trustcheck', type='checkbox', name='trust', value='1')
+					| #{__('Trust User')}
 	input(type='submit', value=__('Submit'))

@@ -14,6 +14,7 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 	const livetext = (isThread || isRecent) && liveElem ? liveElem.childNodes[1] : null;
 	let room = liveElem && liveElem.dataset.room;
 	const viewRawIp = liveElem && liveElem.dataset.viewRawIp === 'true';
+	const viewRawAccount = liveElem && liveElem.dataset.viewRawAccount === 'true';
 	const updateButton = document.getElementById('updatepostsbutton');
 	const updateLive = (message, color) => {
 		livecolor.style.backgroundColor = color;
@@ -137,6 +138,7 @@ window.addEventListener('settingsReady', function() { //after domcontentloaded
 		//create a new post
 		const postHtml = post({
 			viewRawIp,
+			viewRawAccount,
 			post: postData,
 			modview: isModView,
 			manage: (isRecent && !isGlobalRecent),

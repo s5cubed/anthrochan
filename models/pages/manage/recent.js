@@ -11,18 +11,31 @@ module.exports = async (req, res, next) => {
 
 	const { dontStoreRawIps } = config.get;
 	const { page, offset, queryString } = pageQueryConverter(req.query, limit);
-	let ip = decodeQueryIP(req.query, res.locals.permissions);
+
+	let match = decodeQueryIP(req.query, res.locals.permissions);
+
 	const postId = typeof req.query.postid === 'string' ? req.query.postid : null;
 	if (postId && +postId === parseInt(postId) && Number.isSafeInteger(+postId)) {
 		const fetchedPost = await Posts.getPost(req.params.board, +postId, true);
 		if (fetchedPost) {
-			ip = decodeQueryIP({ ip: fetchedPost.ip.cloak }, res.locals.permissions);
+			match = decodeQueryIP({ ip: fetchedPost.ip.cloak }, res.locals.permissions);
 		}
 	}
 
-	let posts;
+	let posts = null;
 	try {
-		posts = await Posts.getBoardRecent(offset, limit, ip, req.params.board, res.locals.permissions);
+		if (match) {
+			if (match.ip) {
+				posts = await Posts.getBoardRecent(offset, limit, match.ip, req.params.board, res.locals.permissions);
+			} else if (match.account && res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT)) {
+				posts = await Posts.getBoardRecentByAccount(offset, limit, match.account, req.params.board, res.locals.permissions);			
+			}		
+		} 
+
+		if (posts === null) {
+			posts = await Posts.getBoardRecent(offset, limit, null, req.params.board, res.locals.permissions);
+		}
+		
 	} catch (err) {
 		return next(err);
 	}
@@ -37,9 +50,11 @@ module.exports = async (req, res, next) => {
 			posts,
 			permissions: res.locals.permissions,
 			viewRawIp: res.locals.permissions.get(Permissions.VIEW_RAW_IP) && !dontStoreRawIps,
+			viewRawAccount: res.locals.permissions.get(Permissions.VIEW_RAW_ACCOUNT),
 			page,
 			postId,
-			queryIp: ip ? req.query.ip : null,
+			queryIp: match && match.ip ? req.query.ip : null,
+			account: match && match.account ? req.query.account : null,
 			queryString,
 		});
 	}

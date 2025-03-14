@@ -1141,6 +1141,10 @@ input:invalid, textarea:invalid {
 	width: 100%;
 }
 
+.post-username {
+	font-weight: bold;
+}
+
 .post-subject {
 	color: var(--subject-color)!important;
 	font-weight: bold;

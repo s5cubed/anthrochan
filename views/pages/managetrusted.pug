@@ -1,0 +1,45 @@
+extends ../layout.pug
+include ../mixins/managenav.pug
+include ../mixins/boardheader.pug
+
+block head
+	title /#{board._id}/ - #{__('Trusted Users')}
+
+block content
+	+boardheader(__('Trusted Users'))
+	br
+	+managenav('trusted')
+	hr(size=1)
+	.form-wrapper.flexleft
+		h4.no-m-p #{__('Add User')}:
+		form.form-post.mv-5(action=`/forms/board/${board._id}/addtrusted` method='POST' enctype='application/x-www-form-urlencoded')
+			input(type='hidden' name='_csrf' value=csrf)
+			.row
+				.label #{__('Username')}
+				input(type='text' name='username' required)
+			input(type='submit', value=__('Add'))
+	hr(size=1)
+	h4.no-m-p #{__('Current Trusted Users')}:
+	//-ew
+	- const trustedEntries = Object.entries(board.trusted).sort((a, b) => new Date(a[1].addedDate) - new Date(b[1].addedDate));
+	if trustedEntries.length > 0
+		form.form-post.nogrow(action=`/forms/board/${board._id}/deletetrusted` method='POST' enctype='application/x-www-form-urlencoded')
+			input(type='hidden' name='_csrf' value=csrf)
+			.table-container.flex-left.mv-5.text-center
+				table
+					tr
+						th
+						th #{__('Username')}
+						th #{__('Date Added')}
+					for trusted in trustedEntries
+						tr
+							td: input(type='checkbox' name='checkedtrusted' value=trusted[0])
+							td #{trusted[0]}
+							td 
+								time.reltime(datetime=trusted[1].addedDate) #{trusted[1].addedDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
+
+			h4.no-m-p #{__('Delete Selected')}:
+			input(type='submit', value='Delete')
+
+	else
+		p #{__('None')}

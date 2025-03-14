@@ -82,6 +82,40 @@ module.exports = {
 		}).skip(offset).limit(limit).toArray();
 		return posts;
 	},
+	
+	getBoardRecentByAccount: async (offset=0, limit=20, account, board, permissions) => {
+		const query = {};
+		if (board) {
+			query['board'] = board;
+		}
+		const projection = {
+			'salt': 0,
+			'password': 0,
+		};
+		if (!board) {
+			projection['reports'] = 0;
+		} else {
+			projection['globalreports'] = 0;
+		}
+		
+		query['account'] = account;
+		
+		if (!permissions.get(Permissions.VIEW_RAW_IP)) {
+			projection['ip.raw'] = 0;
+			//MongoError, why cant i just projection['reports.ip.raw'] = 0;
+			if (board) {
+				projection['reports'] = { ip: { raw: 0 } };
+			} else {
+				projection['globalreports'] = { ip: { raw: 0 } };
+			}
+		}
+		const posts = await db.find(query, {
+			projection
+		}).sort({
+			'_id': -1
+		}).skip(offset).limit(limit).toArray();
+		return posts;
+	},
 
 	getRecent: async (board, page, limit=10, getSensitive=false, sortSticky=true) => {
 		// get all thread posts (posts with null thread id)

@@ -220,14 +220,22 @@ async function wipe() {
 
 	const ANON = new Permission();
 	ANON.setAll([
-		Permissions.USE_MARKDOWN,
+		Permissions.CREATE_ACCOUNT,
+		Permissions.USE_MARKDOWN_GENERAL,
 	]);
 
-	const BOARD_STAFF_DEFAULTS = new Permission(ANON.base64);
+	const TRUSTED_USER = new Permission(ANON.base64);
+	TRUSTED_USER.setAll([
+		Permissions.BYPASS_CAPTCHA,
+		Permissions.BYPASS_FILE_APPROVAL,
+	]);
+	
+	const BOARD_STAFF_DEFAULTS = new Permission(TRUSTED_USER.base64);
 	BOARD_STAFF_DEFAULTS.setAll([
 		Permissions.MANAGE_BOARD_GENERAL,
 		Permissions.MANAGE_BOARD_BANS,
 		Permissions.MANAGE_BOARD_LOGS,
+		Permissions.VIEW_BOARD_GLOBAL_BANS,
 	]);
 
 	const BOARD_STAFF = new Permission(BOARD_STAFF_DEFAULTS.base64);
@@ -241,35 +249,25 @@ async function wipe() {
 	]);
 
 	const BOARD_OWNER = new Permission(BOARD_OWNER_DEFAULTS.base64);
-
-	const GLOBAL_STAFF = new Permission(BOARD_OWNER.base64);
+	
+	const GLOBAL_STAFF = new Permission(BOARD_STAFF.base64);
 	GLOBAL_STAFF.setAll([
-		Permissions.MANAGE_GLOBAL_GENERAL,
-		Permissions.MANAGE_GLOBAL_BANS,
-		Permissions.MANAGE_GLOBAL_LOGS,
-		Permissions.MANAGE_GLOBAL_NEWS,
-		Permissions.MANAGE_GLOBAL_BOARDS,
-		Permissions.MANAGE_GLOBAL_SETTINGS,
-		Permissions.MANAGE_BOARD_OWNER,
-		Permissions.BYPASS_FILTERS,
 		Permissions.BYPASS_BANS,
-		Permissions.BYPASS_SPAMCHECK,
-		Permissions.BYPASS_RATELIMITS,
+		
+		Permissions.MANAGE_GLOBAL_GENERAL,
+		Permissions.MANAGE_GLOBAL_LOGS,
+		Permissions.MANAGE_GLOBAL_BANS,
 	]);
 
-	const ADMIN = new Permission(GLOBAL_STAFF.base64);
-	ADMIN.setAll([
-		Permissions.CREATE_BOARD,
-		Permissions.CREATE_ACCOUNT,
-		Permissions.MANAGE_GLOBAL_ACCOUNTS,
-		Permissions.MANAGE_GLOBAL_ROLES,
-		Permissions.USE_MARKDOWN_IMAGE,
-	]);
+	const ADMIN = new Permission();
+	ADMIN.setAll(Permission.allPermissions);
 
 	const ROOT = new Permission();
 	ROOT.setAll(Permission.allPermissions);
+
 	await Roles.db.insertMany([
 		{ name: 'ANON', permissions: Binary(ANON.array) },
+		{ name: 'TRUSTED_USER', permissions: Binary(TRUSTED_USER.array) },
 		{ name: 'BOARD_STAFF', permissions: Binary(BOARD_STAFF.array) },
 		{ name: 'BOARD_OWNER', permissions: Binary(BOARD_OWNER.array) },
 		{ name: 'BOARD_STAFF_DEFAULTS', permissions: Binary(BOARD_STAFF_DEFAULTS.array) },

@@ -29,8 +29,13 @@ module.exports = {
 			}, expected: true, blocking: true, error: __('Invalid account username') },
 			{ result: (res.locals.user.username === req.body.username), expected: false, error: __('You can\'t edit your own permissions') },
 			{ result: !existsBody(req.body.template) //no template, OR the template is a valid one
-				|| inArrayBody(req.body.template, [roleManager.roles.ANON.base64, roleManager.roles.GLOBAL_STAFF.base64,
-					roleManager.roles.ADMIN.base64, roleManager.roles.BOARD_STAFF.base64, roleManager.roles.BOARD_OWNER.base64]),
+				|| inArrayBody(req.body.template, [
+					roleManager.roles.ANON.base64,
+					roleManager.roles.GLOBAL_STAFF.base64,
+					roleManager.roles.ADMIN.base64,
+					roleManager.roles.TRUSTED_USER.base64,
+					roleManager.roles.BOARD_STAFF.base64,
+					roleManager.roles.BOARD_OWNER.base64]),
 			expected: true, error: __('Invalid template selection') },
 			{ result: () => {
 				//not applying a template, OR the user doesn't have root perms, has to be a function to execute after the async result above.
