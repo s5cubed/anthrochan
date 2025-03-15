@@ -6,10 +6,10 @@ Repo Mirror(s):
  - https://github.com/anthro-foo/anthrochan
 
 Contact the author:
- - Email: anthrofoo@mailfence.com
+ - Email: s5s5s5wum@gmail.com
 
 ## Live instance
- - https://anthro.foo
+ - https://averi.foo
 
 ## Features
  - [x] Multiple language support (🇬🇧 🇵🇹 🇧🇷 🇷🇺 🇮🇹 🇪🇸)
@@ -26,8 +26,6 @@ Contact the author:
  - [x] [API documentation](https://fatchan.gitgud.site/jschan-docs/)
  - [x] Built-in webring (compatible w/ [lynxchan](https://gitlab.com/alogware/LynxChanAddon-Webring) & [infinity](https://gitlab.com/Tenicu/infinityaddon-webring))
  - [x] Beautiful bundled frontend with lots of themes and options, see below:
-
-![screenshots](collage.gif "screenshots")
 
 ## License
 GNU AGPLv3, see [LICENSE](LICENSE).

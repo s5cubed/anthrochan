@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default environment to development
-env="development"
+env="production"
 
 # Check for the -p flag to set the environment to production
 while getopts "p" opt; do
@@ -21,11 +21,11 @@ pm2 stop all
 pm2 flush
 
 # In prod
-if [ "$env" == "production" ]; then
+#if [ "$env" == "production" ]; then
     # Pull new main branch
-    git pull || { echo "Git pull failed"; exit 1; }
-    npm install || { echo "NPM install failed"; exit 1; }
-fi
+    #git pull || { echo "Git pull failed"; exit 1; }
+    #npm install || { echo "NPM install failed"; exit 1; }
+#fi
 
 gulp migrate && gulp || { echo "Gulp tasks failed"; exit 1; }
 # Start anthrochan server

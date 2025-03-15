@@ -6,7 +6,7 @@ block head
 
 block content
 	.flexcenter
-		img.homepage-image(src="/file/homepage-icon.png" alt="A brown fox in a box, with the letter anthro.foo.")
+		img.homepage-image(src="/file/homepage-icon.png" alt="A brown fox in a box, with the letter averi.foo.")
 	h1.board-title #{meta.siteName}
 	.table-container.flex-center.mv-10.text-center
 		table
@@ -15,16 +15,17 @@ block content
 			tr
 				td
 					pre.no-m-p
-						| Welcome to anthro.foo! A site for comfy discussion and sharing of art.
+						| Welcome to averi.foo! A SFW-ONLY imageboard for anthro art and shitposting
+						br
+						| Born from the ashes of /bp/ on soyjak.party
+						br
+						| Our history is important, you will read:!{' '}
+						a(href='https://wiki.averi.foo') The Wiki!
+						|.
 						br
 						| Make sure to read the!{' '}
-						a(href='/rules.html') rules.
-						br
-						| Affiliated sites:!{' '}
-						a(href='https://anthrobooru.party') Anthrobooru
-						|,!{' '}
-						a(href='https://wiki.anthro.foo') The Wiki
-						|.
+                                                a(href='/rules.html') rules.
+
 	if recentNews && recentNews.length > 0
 		.table-container.flex-center.mv-10
 			table.newstable
