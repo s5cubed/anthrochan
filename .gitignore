@@ -3,6 +3,8 @@ backup.sh
 
 git-get-main.sh
 upload.sh
+*~
+*.kra
 
 #secrets
 configs/*.json
