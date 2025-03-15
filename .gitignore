@@ -1,6 +1,9 @@
 node_modules/
 backup.sh
 
+git-get-main.sh
+upload.sh
+
 #secrets
 configs/*.json
 configs/*.js
