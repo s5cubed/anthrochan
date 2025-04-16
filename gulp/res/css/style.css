@@ -1482,6 +1482,14 @@ table.boardtable .nobreak {
 	pointer-events: none;
 }
 
+.overlay-text {
+	/* text formatting */
+	color: red;
+	font-size: 1rem;
+	text-align: center;
+	text-shadow: 2px 2px 10px black;
+}
+
 .post-file-src .overlay-text {
 	/* offset to center over image */
     position: absolute;

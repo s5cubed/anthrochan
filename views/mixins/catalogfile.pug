@@ -6,6 +6,8 @@ mixin catalogfile(postURL, post, file, small=false)
     if !(manage || modview || globalmanage || file.approved)
         +filependingapproval(true, postURL, post, small)
     else
+        if (manage || modview || globalmanage) && !small && !file.approved
+            .overlay-text File pending approval
         .post-file-src
             a(href=`${postURL}#${post.postId}`)
                 if post.spoiler || file.spoiler
@@ -18,5 +20,3 @@ mixin catalogfile(postURL, post, file, small=false)
                     div.audioimg.catalog-thumb(class=(small?'small':''))
                 else
                     img.catalog-thumb(class=(small?'small':'') src=`/file/${file.filename}` width=file.geometry.width height=file.geometry.height loading='lazy')
-            if (manage || modview || globalmanage) && !small && !file.approved
-                .overlay-text File pending approval
