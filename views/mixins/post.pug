@@ -148,6 +148,8 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 							if !(manage || modview || globalmanage || file.approved)
 								+filependingapproval()
 							else
+								if (manage || modview || globalmanage) && !file.approved
+										.overlay-text File pending approval
 								.post-file-src(data-type=type data-attachment=(file.attachment ? "true" : "false"))
 									a(target='_blank' href=`/file/${file.filename}`)
 										if post.spoiler || file.spoiler
@@ -160,8 +162,6 @@ mixin post(post, truncate, manage=false, globalmanage=false, ban=false, overboar
 											div.audioimg.file-thumb
 										else
 											img.file-thumb(src=`/file/${file.filename}` height=file.geometry.height width=file.geometry.width loading='lazy')
-									if (manage || modview || globalmanage) && !file.approved
-										.overlay-text File pending approval
 								if (manage || modview || globalmanage) && !file.approved
 									+fileapproval(file.filename)
 			- if (post.message && modview) { post.message = post.message.replace(new RegExp(`<a class="quote" href="/${post.board}/`, 'g'), `<a class="quote" href="/${post.board}/manage/`); } //its either this, a subdomain, or nothing.
