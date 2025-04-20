@@ -74,17 +74,19 @@ class modMacroHandler {
 				break;
 			case 'rule3':
 				this.globalban.checked = true;
+				this.widerange.checked = true;
+				this.noappeal.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 3 (Hostility)';
-				this.banduration.value = '1d';
+				this.banreason.value = 'Rule 3 (Spam)';
+				this.banduration.value = '4h';
 				break;
 			case 'rule4':
 				this.globalban.checked = true;
 				this.widerange.checked = true;
-				this.noappeal.checked = true;
+				this.delete.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 4 (Spam)';
-				this.banduration.value = '4h';
+				this.banreason.value = 'Rule 4 (Advocating for pedophilia)';
+				this.banduration.value = '1y';
 				break;
 			case 'rule5':
 				this.globalban.checked = true;
@@ -93,6 +95,14 @@ class modMacroHandler {
 				this.preservepost.checked = true;
 				this.banreason.value = 'Rule 5 (Underage)';
 				this.banduration.value = '1y';
+				break;
+			case 'rule6':
+				this.globalban.checked = true;
+				this.widerange.checked = true;
+				this.noappeal.checked = true;
+				this.preservepost.checked = true;
+				this.banreason.value = 'Rule 6 (Advertising)';
+				this.banduration.value = '4h';
 				break;
 			case 'banevasion':
 				this.deletefile.checked = true;
