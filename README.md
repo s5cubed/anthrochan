@@ -21,6 +21,7 @@ Contact the author:
  - https://averi.foo
 
 ## Features
+ - [x] File approval system
  - [x] Multiple language support (🇬🇧 🇵🇹 🇧🇷 🇷🇺 🇮🇹 🇪🇸)
  - [x] Optional user created boards
  - [x] Multiple files per post
@@ -34,7 +35,8 @@ Contact the author:
  - [x] [Tegaki](https://github.com/desuwa/tegaki) applet with drawing and replays
  - [x] [API documentation](https://fatchan.gitgud.site/jschan-docs/)
  - [x] Built-in webring (compatible w/ [lynxchan](https://gitlab.com/alogware/LynxChanAddon-Webring) & [infinity](https://gitlab.com/Tenicu/infinityaddon-webring))
- - [x] Beautiful bundled frontend with lots of themes and options, see below:
+ - [x] Beautiful bundled frontend with lots of themes and options
+ - [x] Chicken sandwiches 
 
 ## License
 GNU AGPLv3, see [LICENSE](LICENSE).
