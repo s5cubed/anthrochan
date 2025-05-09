@@ -86,7 +86,7 @@ module.exports = {
 			{ result: numberBody(req.body.tph_trigger_action, 0, 4), expected: true, error: __('Invalid tph trigger action') },
 			{ result: numberBody(req.body.pph_trigger, 0, 10000), expected: true, error: __('Invalid pph trigger threshold') },
 			{ result: numberBody(req.body.pph_trigger_action, 0, 4), expected: true, error: __('Invalid pph trigger action') },
-			{ result: numberBody(req.body.lock_reset, 0, 2), expected: true, error: __('Invalid trigger reset lock') },
+			{ result: numberBody(req.body.lock_reset, 0, 3), expected: true, error: __('Invalid trigger reset lock') },
 			{ result: numberBody(req.body.captcha_reset, 0, 2), expected: true, error: __('Invalid trigger reset captcha') },
 			{ result: numberBody(req.body.delete_protection_age, 0), expected: true, error: __('Invalid OP thread age delete protection') },
 			{ result: numberBody(req.body.delete_protection_count, 0), expected: true, error: __('Invalid OP thread reply count delete protection') },
