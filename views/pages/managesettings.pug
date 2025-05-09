@@ -298,6 +298,7 @@ block content
 															option(value='0', selected=board.settings.lockReset === 0) #{__('No change')}
 															option(value='1', selected=board.settings.lockReset === 1) #{__('Unlock board')}
 															option(value='2', selected=board.settings.lockReset === 2) #{__('Lock thread creation')}
+															option(value='3', selected=board.settings.lockReset === 3) #{__('Unlock board for registered users only')}
 													.row
 														.label #{__('Trigger Reset Captcha Mode')}
 														select(name='captcha_reset')
