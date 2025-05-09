@@ -80,7 +80,7 @@ module.exports = {
 			{ result: numberBodyVariable(req.body.max_reply_message_length, res.locals.board.settings.minReplyMessageLength,
 				req.body.min_reply_message_length, globalLimits.fieldLength.message, globalLimits.fieldLength.message), expected: true,
 			error: __('Max reply message length must be 0-%s and not less than "Min Reply Message Length" (currently %s)', globalLimits.fieldLength.message, res.locals.board.settings.minReplyMessageLength) },
-			{ result: numberBody(req.body.lock_mode, 0, 2), expected: true, error: __('Invalid lock mode') },
+			{ result: numberBody(req.body.lock_mode, 0, 3), expected: true, error: __('Invalid lock mode') },
 			{ result: numberBody(req.body.captcha_mode, 0, 2), expected: true, error: __('Invalid captcha mode') },
 			{ result: numberBody(req.body.tph_trigger, 0, 10000), expected: true, error: __('Invalid tph trigger threshold') },
 			{ result: numberBody(req.body.tph_trigger_action, 0, 4), expected: true, error: __('Invalid tph trigger action') },

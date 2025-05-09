@@ -82,6 +82,19 @@ module.exports = async (req, res) => {
 	}
 
 	//
+	// Accounts only mode. Requires you to own an account to post on the board.
+	//
+	if ((lockMode === 3) && res.locals.user.username == null) { // and not admin
+			await deleteTempFiles(req).catch(console.error);
+			return dynamicResponse(req, res, 400, 'message', {
+				'title': __('Forbidden'),
+				'message': 'Posting on this board is locked to accounts only. If registration is open, please create an account.'),
+				'redirect': redirect
+			});
+	}
+
+
+	//
 	// Check if board/thread creation locked
 	//
 	if ((lockMode === 2 || (lockMode === 1 && !req.body.thread)) //if board lock, or thread lock and its a new thread

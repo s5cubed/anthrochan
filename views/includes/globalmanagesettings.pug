@@ -702,7 +702,8 @@ ul.tabs.group
 				select(name='board_defaults_lock_mode')
 					option(value='0', selected=settings.boardDefaults.lockMode === 0) #{__('Unlocked')}
 					option(value='1', selected=settings.boardDefaults.lockMode === 1) #{__('Lock Thread Creation')}
-					option(value='2', selected=settings.boardDefaults.lockMode === 2) #{__('Board Locked')}
+					option(value='2', selected=settings.boardDefaults.lockMode === 2) #{__('Board Locked for everyone')}
+					option(value='3', selected=settings.boardDefaults.lockMode === 3) #{__('Board Locked for unregistered users')}
 			.row
 				.label #{__('Captcha Mode')}
 				select(name='board_defaults_captcha_mode')
