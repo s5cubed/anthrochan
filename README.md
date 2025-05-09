@@ -1,4 +1,3 @@
-<h1 align="center">averi.foo</h1>
 <p align="center">
  <img src="https://averi.foo/file/homepage-icon.png" width=250px>
 </p>
