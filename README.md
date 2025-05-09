@@ -1,6 +1,15 @@
-# anthrochan
+<h1 align="center">averi.foo</h1>
+<p align="center">
+ <img src="https://averi.foo/file/homepage-icon.png" width=250px>
+</p>
+<p align="center">
+ <img src="https://skillicons.dev/icons?i=cloudflare,nodejs" width=180px>
+</p>
 
-Custom fork of jschan imageboard software.
+
+
+Averi.foo is a custom fork of jschan, an imageboard software by Thomas Lynch.
+This site has a heavy focus on anthropomorphic animals and sanitization.
 
 Repo Mirror(s):
  - https://github.com/s5cubed/anthrochan
