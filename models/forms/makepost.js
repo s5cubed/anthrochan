@@ -84,7 +84,7 @@ module.exports = async (req, res) => {
 	//
 	// Accounts only mode. Requires you to own an account to post on the board.
 	//
-	if ((lockMode === 3) && res.locals.user.username == null) { // and not admin
+	if ((lockMode === 3) && res.locals.user.username === undefined) { // and not admin
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Forbidden'),
