@@ -6,7 +6,7 @@ Repo Mirror(s):
  - https://github.com/anthro-foo/anthrochan
 
 Contact the author:
- - Email: s5s5s5wum@gmail.com
+ - Email: administration@averi.foo
 
 ## Live instance
  - https://averi.foo
