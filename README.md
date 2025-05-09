@@ -3,7 +3,7 @@
 Custom fork of jschan imageboard software.
 
 Repo Mirror(s):
- - https://github.com/anthro-foo/anthrochan
+ - https://github.com/s5cubed/anthrochan
 
 Contact the author:
  - Email: administration@averi.foo
