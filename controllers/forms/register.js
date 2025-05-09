@@ -35,7 +35,7 @@ module.exports = {
 			]);
 		} else {
 			errors = await checkSchema([
-				{ result: res.locals.permissions.get(Permissions.CREATE_ACCOUNT), blocking: true, expected: true, error: __('No permission') },
+				{ result: res.locals.permissions.get(Permissions.CREATE_ACCOUNT), blocking: true, expected: true, error: __('Registration is closed at the moment. Check again later!') },
 				{ result: existsBody(req.body.username), expected: true, error: __('Missing username') },
 				{ result: lengthBody(req.body.username, 0, 50), expected: false, error: __('Username must be 50 characters or less') },
 				{ result: lengthBody(req.body.username), expected: false, error: __('Username must be 50 characters or less') },
