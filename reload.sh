@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Default environment to development
-env="production"
+env="development"
 
 # Check for the -p flag to set the environment to production
 while getopts "p" opt; do
