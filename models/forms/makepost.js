@@ -88,7 +88,7 @@ module.exports = async (req, res) => {
 			await deleteTempFiles(req).catch(console.error);
 			return dynamicResponse(req, res, 400, 'message', {
 				'title': __('Forbidden'),
-				'message': 'Posting on this board is locked to accounts only. If registration is open, please create an account.'),
+				'message': 'Posting on this board is locked to accounts only. If registration is open, please create an account.',
 				'redirect': redirect
 			});
 	}
