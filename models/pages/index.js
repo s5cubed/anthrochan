@@ -20,6 +20,8 @@ module.exports = {
 	csrfPage: require(__dirname+'/csrf.js'),
 	noncePage: require(__dirname+'/nonce.js'),
 	randombanner: require(__dirname+'/randombanner.js'),
+	randomtegaki: require(__dirname+'/randomtegaki.js'),
+	randomimage: require(__dirname+'/randomimage.js'),
 	news: require(__dirname+'/news.js'),
 	captchaPage: require(__dirname+'/captchapage.js'),
 	captcha: require(__dirname+'/captcha.js'),

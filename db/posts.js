@@ -983,4 +983,62 @@ module.exports = {
 		next();
 	},
 
+	randomImage: async () => {
+		const getRandomImage = await db.aggregate([
+			{ $unwind: "$files" },
+
+			{
+				$match: {
+					"files.originalFilename": {
+						$regex: /^(?!.*-tegaki\.png$).*/
+					},
+					"files.mimetype": {
+						$regex: /^image/,
+					},
+					"files.approved": true
+				}
+			},
+
+			{
+				$project: {
+					_id: 0,
+					file: "$files"
+				}
+			},
+
+			{ $sample: { size: 1 } }
+		]).toArray();
+		if (getRandomImage[0] === undefined) {
+			return false
+		}
+		return getRandomImage[0].file.filename
+	},
+
+	randomTegaki: async () => {
+		const getRandomTegaki = await db.aggregate([
+			{ $unwind: "$files" },
+
+			{
+				$match: {
+					"files.originalFilename": {
+						$regex: /-tegaki\.png$/
+					},
+					"files.approved": true
+				}
+			},
+
+			{
+				$project: {
+					_id: 0,
+					 file: "$files"
+				}
+			},
+
+			{ $sample: { size: 1 } }
+		]).toArray();
+		if (getRandomTegaki[0] === undefined) {
+			return false
+		}
+		return getRandomTegaki[0].file.filename
+	}
 };

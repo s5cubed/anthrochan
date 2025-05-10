@@ -23,7 +23,7 @@ const express  = require('express')
 	, { globalManageApproval, globalManageSettings, globalManageReports, globalManageBans, globalManageBoards, globalManageFilters, globalEditFilter, editNews, editAccount, editRole,
 		globalManageRecent, globalManageAccounts, globalManageNews, globalManageLogs, globalManageRoles } = require(__dirname+'/../models/pages/globalmanage/')
 	, { changePassword, blockBypass, home, register, login, create, myPermissions, sessions, setupTwoFactor,
-		board, catalog, banners, boardSettings, globalSettings, randombanner, news, captchaPage, overboard, overboardCatalog,
+		board, catalog, banners, boardSettings, globalSettings, randombanner, randomtegaki, randomimage, news, captchaPage, overboard, overboardCatalog,
 		captcha, thread, modlog, modloglist, account, boardlist, customPage, csrfPage, noncePage } = require(__dirname+'/../models/pages/')
 	, threadParamConverter = paramConverter({ processThreadIdParam: true })
 	, logParamConverter = paramConverter({ processDateParam: true })
@@ -56,6 +56,8 @@ router.get('/:board/banners.(html|json)', Boards.exists, setBoardLanguage, banne
 router.get('/:board/settings.json', Boards.exists, setBoardLanguage, boardSettings); //public board settings
 router.get('/settings.json', globalSettings); //public global settings
 router.get('/randombanner', randombanner); //random banner
+router.get('/randomtegaki', randomtegaki); //random tegaki
+router.get('/randomimage', randomimage); //random image
 
 //board manage pages
 router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,

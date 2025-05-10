@@ -22,7 +22,7 @@ main.minimal {
 .homepage-image {
 	/* display: block; */
 	/* align-content: center; */
-	width: 10%;
+	width: 20%;
 	height: auto;
 
 	@media (max-width: 600px) {
@@ -984,6 +984,20 @@ input:invalid, textarea:invalid {
 
 .no-resize {
 	resize: none;
+}
+
+.home-image-widget {
+	max-height: 220px;
+	max-width: 220px;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+	justify-content: center;
+	@media only screen and (max-width: 600px) {
+		display: block;
+	}
 }
 
 .container {
