@@ -56,6 +56,7 @@ router.get('/:board/banners.(html|json)', Boards.exists, setBoardLanguage, banne
 router.get('/:board/settings.json', Boards.exists, setBoardLanguage, boardSettings); //public board settings
 router.get('/settings.json', globalSettings); //public global settings
 router.get('/randombanner', randombanner); //random banner
+router.get('/randomtegaki', randomtegaki); //random tegaki
 
 //board manage pages
 router.get('/:board/manage/catalog.html', useSession, sessionRefresh, isLoggedIn, Boards.exists, setBoardLanguage, calcPerms,
