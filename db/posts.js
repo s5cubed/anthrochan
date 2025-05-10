@@ -983,4 +983,27 @@ module.exports = {
 		next();
 	},
 
+	randomTegaki: async () => {
+		return db.aggregate([
+			{ $unwind: "$files" },
+
+			{
+				$match: {
+					"files.originalFilename": {
+						$regex: /-tegaki\.png$/
+					},
+					"files.approved": true
+				}
+			},
+
+			{
+				$project: {
+					_id: 0,
+					 file: "$files"
+				}
+			},
+
+			{ $sample: { size: 1 } }
+		]).toArray();
+
 };
