@@ -986,10 +986,18 @@ input:invalid, textarea:invalid {
 	resize: none;
 }
 
+.home-image-widget {
+	max-height: 220px;
+	max-width: 220px;
+}
+
 .grid-container {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(100px, auto));
 	justify-content: center;
+	@media only screen and (max-width: 600px) {
+		display: block;
+	}
 }
 
 .container {
