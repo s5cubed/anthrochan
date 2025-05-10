@@ -984,11 +984,14 @@ module.exports = {
 	},
 
 	randomImage: async () => {
-		return db.aggregate([
+		const getRandomImage = await db.aggregate([
 			{ $unwind: "$files" },
 
 			{
 				$match: {
+					"files.originalFilename": {
+						$regex: /^(?!.*-tegaki\.png$).*/
+					},
 					"files.mimetype": {
 						$regex: /^image/,
 					},
@@ -1005,10 +1008,11 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
+		return getRandomImage[0].file.filename
 	},
 
 	randomTegaki: async () => {
-		return db.aggregate([
+		const getRandomTegaki = await db.aggregate([
 			{ $unwind: "$files" },
 
 			{
@@ -1028,6 +1032,7 @@ module.exports = {
 			},
 
 			{ $sample: { size: 1 } }
-		]).toArray()
+		]).toArray();
+		return getRandomTegaki[0].file.filename
 	}
 };

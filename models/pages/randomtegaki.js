@@ -15,6 +15,6 @@ module.exports = async (req, res, next) => {
 		return res.redirect('/file/defaultbanner.png');
 	}
 
-	return res.redirect(`/file/${tegaki[0].file.filename}`);
+	return res.redirect(`/file/${tegaki}`);
 
 };
