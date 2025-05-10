@@ -12,10 +12,9 @@ module.exports = async (req, res, next) => {
 	}
 
 	if (!tegaki) {
-		// Placeholder for now.
-		return res.redirect('/file/defaultbanner.png');
+		return res.redirect('/file/defaultrandomtegaki.png');
 	}
 
-	return res.redirect(`/file/${tegaki[0].file.filename}`);
+	return res.redirect(`/file/${tegaki}`);
 
 };

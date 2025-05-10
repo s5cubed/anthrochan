@@ -983,6 +983,30 @@ module.exports = {
 		next();
 	},
 
+	randomImage: async () => {
+		return db.aggregate([
+			{ $unwind: "$files" },
+
+			{
+				$match: {
+					"files.mimetype": {
+						$regex: /^image/,
+					},
+					"files.approved": true
+				}
+			},
+
+			{
+				$project: {
+					_id: 0,
+					file: "$files"
+				}
+			},
+
+			{ $sample: { size: 1 } }
+		]).toArray()[0].file.filename;
+	},
+
 	randomTegaki: async () => {
 		return db.aggregate([
 			{ $unwind: "$files" },
@@ -1004,6 +1028,6 @@ module.exports = {
 			},
 
 			{ $sample: { size: 1 } }
-		]).toArray();
+		]).toArray()[0].file.filename;
 	}
 };
