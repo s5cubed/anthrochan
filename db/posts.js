@@ -1004,7 +1004,7 @@ module.exports = {
 			},
 
 			{ $sample: { size: 1 } }
-		]).toArray()[0].file.filename;
+		]).toArray();
 	},
 
 	randomTegaki: async () => {
@@ -1028,6 +1028,6 @@ module.exports = {
 			},
 
 			{ $sample: { size: 1 } }
-		]).toArray()[0].file.filename;
+		]).toArray()
 	}
 };
