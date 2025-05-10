@@ -6,7 +6,7 @@ const { Boards, Accounts, Modlogs } = require(__dirname+'/../../db/')
 	, dynamicResponse = require(__dirname+'/../../lib/misc/dynamic.js')
 	, roleManager = require(__dirname+'/../../lib/permission/rolemanager.js')
 	, uploadDirectory = require(__dirname+'/../../lib/file/uploaddirectory.js')
-	, restrictedURIs = new Set(['captcha', 'forms', 'randombanner', 'randomtegaki', 'all'])
+	, restrictedURIs = new Set(['captcha', 'forms', 'randombanner', 'randomtegaki', 'randomimage', 'all'])
 	, { ensureDir } = require('fs-extra')
 	, config = require(__dirname+'/../../lib/misc/config.js');
 
