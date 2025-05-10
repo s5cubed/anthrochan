@@ -1005,5 +1005,5 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
-
+	}
 };
