@@ -1008,6 +1008,9 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
+		if (getRandomImage === undefined) {
+			return false
+		}
 		return getRandomImage[0].file.filename
 	},
 
@@ -1033,6 +1036,9 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
+		if (getRandomTegaki === undefined) {
+			return false
+		}
 		return getRandomTegaki[0].file.filename
 	}
 };
