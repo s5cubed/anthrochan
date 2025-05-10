@@ -986,6 +986,12 @@ input:invalid, textarea:invalid {
 	resize: none;
 }
 
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+	justify-content: center;
+}
+
 .container {
 	padding: 10px;
 }

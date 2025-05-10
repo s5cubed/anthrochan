@@ -5,100 +5,104 @@ block head
 	title #{meta.siteName}
 
 block content
-	.flexcenter
-		img.homepage-image(src="/file/homepage-icon.png" alt="A brown fox in a box, with the letter averi.foo.")
-	h1.board-title #{meta.siteName}
-	.table-container.flex-center.mv-10.text-center
-		table
-			tr
-				th.alt #{__('Welcome')}
-			tr
-				td
-					pre.no-m-p
-						| Welcome to averi.foo! A SFW-ONLY imageboard dedicated to Fiddleafox, Averi, anthro art and shitposting
-						br
-						| Sexualization of anthros is not allowed and romance is not encouraged.
-						br
-						| Born from the ashes of /bp/ on The Sharty.
-						br
-						| Our history is important, you will read:!{' '}
-						a(href='https://wiki.averi.foo') The Wiki!
-						|.
-						br
-						| Make sure to read the!{' '}
-						a(href='/rules.html') rules.
-
-	if recentNews && recentNews.length > 0
-		.table-container.flex-center.mv-10
-			table.newstable
-				tr
-					th(colspan=3) #{__('Latest News')}
-				each post in recentNews
-					tr
-						td
-							a.left(href=`/news.html#${post._id}`) #{post.title}
-						td
-							p.no-m-p #{`${post.message.raw.substring(0,50)}${post.message.raw.length > 50 ? '...' : ''}`}
-						td
-							- const newsDate = new Date(post.date);
-							time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
-	if hotThreads && hotThreads.length > 0
-		.table-container.flex-center.mv-10
-			table#hotposts
-				tr(colspan=3) 
-				each post, i in hotThreads
-					tr
-						td.text-center
-							span.help(title=__('Hot Thread (%s)', post.score.toFixed(1))) 🔥
-							|  #{post.replyposts}
-						td 
-							- const threadLink = `/${post.board}/thread/${post.postId}.html#${post.postId}`;
-							a.quote(href=threadLink)
-								if post.subject
-									| #{post.subject.substring(0,30)}#{post.subject.length > 30 ? '...' : ''}
-									if post.nomarkup
-										|  - 
-								if post.nomarkup
-									| #{post.nomarkup.substring(0,40)}#{post.nomarkup.length > 40 ? '...' : ''}
-								if !post.nomarkup && !post.subject
-									| >>>/#{post.board}/#{post.postId}
-						td
-							- const postedDate = new Date(post.date);
-							time.right.reltime(datetime=postedDate.toISOString()) #{postedDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
-	if boards && boards.length > 0
-		+boardtable(true, false)
-			each board in boards
-				tr
-					td 
-						if board.settings.sfw === true
-							span.left
-								span.help(title=__('SFW')) &#x1F4BC;
-								|  
-						a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
-					td #{board.settings.description}
-					td.nobreak #{board.pph}
-					td.nobreak #{board.ppd}
-					td.nobreak #{board.ips}
-					td.nobreak #{board.sequence_value-1}
-			if localStats.total-localStats.unlisted > boards.length
-				tr
-					td(colspan=6)
-						a.bold(href='/boards.html') More Boards
-		.table-container.flex-center.mv-10.text-center
-			table(style='max-width:450px')
-				tr
-					th #{__('Local Stats')}
-				tr
-					td
-						pre.no-m-p
-							| #{__('There are currently %s public boards, %s in total. Sitewide, %s posts have been made in the last day, %s in the last hour, %s in total.', localStats.total-localStats.unlisted, localStats.total, localStats.ppd, localStats.pph, localStats.posts)}
-							| #{__('%s files are being served, totaling %s.', fileStats.count, fileStats.totalSizeString)}
-		if enableWebring === true && webringStats != null
+	.grid-container
+		.container
+			.flexcenter
+				img.homepage-image(src="/file/homepage-icon.png" alt="A brown fox in a box, with the letter averi.foo.")
+			h1.board-title #{meta.siteName}
 			.table-container.flex-center.mv-10.text-center
-				table(style='max-width:450px')
+				table
 					tr
-						th #{__('Webring Stats')}
+						th.alt #{__('Welcome')}
 					tr
 						td
 							pre.no-m-p
-								| #{__('There are currently %s sites and %s boards in the known webring. Across all webring boards, %s posts have been made in the last hour, %s in total.', webringStats.sites, webringStats.total, webringStats.pph, webringStats.posts)}
+								| Welcome to averi.foo! A SFW-ONLY imageboard dedicated to Fiddleafox, Averi, anthro art and shitposting
+								br
+								| Sexualization of anthros is not allowed and romance is not encouraged.
+								br
+								| Born from the ashes of /bp/ on The Sharty.
+								br
+								| Our history is important, you will read:!{' '}
+								a(href='https://wiki.averi.foo') The Wiki!
+								|.
+								br
+								| Make sure to read the!{' '}
+								a(href='/rules.html') rules.
+
+			if recentNews && recentNews.length > 0
+				.table-container.flex-center.mv-10
+					table.newstable
+						tr
+							th(colspan=3) #{__('Latest News')}
+						each post in recentNews
+							tr
+								td
+									a.left(href=`/news.html#${post._id}`) #{post.title}
+								td
+									p.no-m-p #{`${post.message.raw.substring(0,50)}${post.message.raw.length > 50 ? '...' : ''}`}
+								td
+									- const newsDate = new Date(post.date);
+									time.right.reltime(datetime=newsDate.toISOString()) #{newsDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
+			if hotThreads && hotThreads.length > 0
+				.table-container.flex-center.mv-10
+					table#hotposts
+						tr(colspan=3)
+						each post, i in hotThreads
+							tr
+								td.text-center
+									span.help(title=__('Hot Thread (%s)', post.score.toFixed(1))) 🔥
+									|  #{post.replyposts}
+								td
+									- const threadLink = `/${post.board}/thread/${post.postId}.html#${post.postId}`;
+									a.quote(href=threadLink)
+										if post.subject
+											| #{post.subject.substring(0,30)}#{post.subject.length > 30 ? '...' : ''}
+											if post.nomarkup
+												|  -
+										if post.nomarkup
+											| #{post.nomarkup.substring(0,40)}#{post.nomarkup.length > 40 ? '...' : ''}
+										if !post.nomarkup && !post.subject
+											| >>>/#{post.board}/#{post.postId}
+								td
+									- const postedDate = new Date(post.date);
+									time.right.reltime(datetime=postedDate.toISOString()) #{postedDate.toLocaleString(pageLanguage, {hourCycle:'h23'})}
+			if boards && boards.length > 0
+				+boardtable(true, false)
+					each board in boards
+						tr
+							td
+								if board.settings.sfw === true
+									span.left
+										span.help(title=__('SFW')) &#x1F4BC;
+										|
+								a(href=`/${board._id}/index.html`) /#{board._id}/ - #{board.settings.name}
+							td #{board.settings.description}
+							td.nobreak #{board.pph}
+							td.nobreak #{board.ppd}
+							td.nobreak #{board.ips}
+							td.nobreak #{board.sequence_value-1}
+					if localStats.total-localStats.unlisted > boards.length
+						tr
+							td(colspan=6)
+								a.bold(href='/boards.html') More Boards
+				.table-container.flex-center.mv-10.text-center
+					table(style='max-width:450px')
+						tr
+							th #{__('Local Stats')}
+						tr
+							td
+								pre.no-m-p
+									| #{__('There are currently %s public boards, %s in total. Sitewide, %s posts have been made in the last day, %s in the last hour, %s in total.', localStats.total-localStats.unlisted, localStats.total, localStats.ppd, localStats.pph, localStats.posts)}
+									| #{__('%s files are being served, totaling %s.', fileStats.count, fileStats.totalSizeString)}
+				if enableWebring === true && webringStats != null
+					.table-container.flex-center.mv-10.text-center
+						table(style='max-width:450px')
+							tr
+								th #{__('Webring Stats')}
+							tr
+								td
+									pre.no-m-p
+										| #{__('There are currently %s sites and %s boards in the known webring. Across all webring boards, %s posts have been made in the last hour, %s in total.', webringStats.sites, webringStats.total, webringStats.pph, webringStats.posts)}
+		.container
+			h1 Test
