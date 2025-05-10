@@ -1,10 +1,11 @@
 window.addEventListener('DOMContentLoaded', () => {
-	if (document.getElementsByClassName('home-image-widget').length > 0) {
-		var imgclickwidget = document.getElementsByClassName('home-image-widget');
-		for (i = 0;i < imgclickwidget.length;i++) {
-			imgclickwidget[i].onclick = function() {
-				this.src = this.src + '?t=' + new Date().getTime();
+		if (document.getElementsByClassName('home-image-widget').length > 0) {
+			document.getElementById("random-tegaki-widget").onclick = function() {
+				this.src = "/randomtegaki" + '?t=' + new Date().getTime();
+			};
+			document.getElementById("random-image-widget").onclick = function() {
+				this.src = "/randomimage" + '?t=' + new Date().getTime();
 			};
 		}
 	}
-});
+);
