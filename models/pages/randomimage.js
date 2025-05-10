@@ -12,7 +12,7 @@ module.exports = async (req, res, next) => {
 	}
 
 	if (!randimage) {
-		return res.redirect('/file/defaultbanner.png');
+		return res.redirect('/file/defaultimage.png');
 	}
 
 	return res.redirect(`/file/${randimage}`);
