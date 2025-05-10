@@ -1008,7 +1008,7 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
-		if (!getRandomImage) {
+		if (getRandomImage[0].file === undefined) {
 			return false
 		}
 		return getRandomImage[0].file.filename
@@ -1036,7 +1036,7 @@ module.exports = {
 
 			{ $sample: { size: 1 } }
 		]).toArray();
-		if (!getRandomTegaki) {
+		if (getRandomTegaki[0].file === undefined) {
 			return false
 		}
 		return getRandomTegaki[0].file.filename
