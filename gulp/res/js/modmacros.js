@@ -93,16 +93,16 @@ class modMacroHandler {
 				this.widerange.checked = true;
 				this.noappeal.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 5 (Underage)';
-				this.banduration.value = '1y';
+				this.banreason.value = 'Rule 5 (Advertising)';
+				this.banduration.value = '4h';
 				break;
 			case 'rule6':
 				this.globalban.checked = true;
 				this.widerange.checked = true;
 				this.noappeal.checked = true;
 				this.preservepost.checked = true;
-				this.banreason.value = 'Rule 6 (Advertising)';
-				this.banduration.value = '4h';
+				this.banreason.value = 'Rule 6 (Tor, Proxy, VPN)';
+				this.banduration.value = '1y';
 				break;
 			case 'banevasion':
 				this.deletefile.checked = true;
