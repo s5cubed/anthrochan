@@ -15,6 +15,7 @@
   // Controls
   color: __('Color'),
   size: __('Size'),
+  stabilization: __('Brush Stabilization')
   alpha: __('Opacity'),
   flow: __('Flow'),
   zoom: __('Zoom'),
@@ -88,10 +89,12 @@ class TegakiTool {
     this.step = 0.0;
     
     this.size = 1;
+	this.stabilization = 1;
     this.alpha = 1.0;
     this.flow = 1.0;
     
     this.useSize = true;
+	this.useStabilization = true;
     this.useAlpha = true;
     this.useFlow = true;
     
@@ -101,6 +104,7 @@ class TegakiTool {
     this.rgb = [0, 0, 0];
     
     this.brushSize = 0;
+	this.brushStabilization = 0;
     this.brushAlpha = 0.0;
     this.brushFlow = 0.0;
     this.stepSize = 0.0;
@@ -139,6 +143,10 @@ class TegakiTool {
   
   setSize(size) {
     this.size = size;
+  }
+
+  setStabilization(stabilization) {
+	this.stabilization = stabilization;
   }
   
   setAlpha(alpha) {
@@ -2806,6 +2814,7 @@ var Tegaki = {
   
   bgColor: '#ffffff',
   maxSize: 64,
+  maxStabilization: 100,
   maxLayers: 25,
   baseWidth: 0,
   baseHeight: 0,
@@ -3345,6 +3354,15 @@ var Tegaki = {
       TegakiUI.updateToolSize();
     }
   },
+
+  setToolStabilzation: function(size) {
+	  if (stabilization > 0 && stabilization <= Tegaki.maxStabilization) {
+		  Tegaki.tool.setStabilization(stabilization);
+		  Tegaki.updateCursorStatus();
+		  Tegaki.recordEvent(TegakiEventSetToolStabilization, performance.now(), stabilization);
+		  TegakiUI.updateToolStabilization();
+	  }
+  },
   
   setToolAlpha: function(alpha) {
     alpha = Math.fround(alpha);
@@ -3549,6 +3567,19 @@ var Tegaki = {
     }
     
     Tegaki.setToolSize(val);
+  },
+
+  onToolStabilizationChange: function() {
+	  var val = +this.value;
+
+	  if (val < 1) {
+		  val = 1;
+	  }
+	  else if (val > Tegaki.maxStabilization) {
+		  val = Tegaki.maxStabilization;
+	  }
+
+	  Tegaki.setToolStabilzation(val);
   },
   
   onToolAlphaChange: function(e) {
@@ -4541,6 +4572,20 @@ class TegakiEventSetToolSize extends TegakiEvent_c {
   dispatch() {
     Tegaki.setToolSize(this.value);
   }
+}
+
+class TegakiEventSetToolStabilization extends TegakiEvent_c {
+	constructor(timeStamp, value) {
+		super();
+		this.timeStamp = timeStamp;
+		this.value = value;
+		this.type = TegakiEvents[this.constructor.name][0];
+		this.coalesce = true;
+	}
+
+	dispatch() {
+		Tegaki.setToolStabilization(this.value);
+	}
 }
 
 class TegakiEventSetToolAlpha {
@@ -5575,6 +5620,9 @@ var TegakiUI = {
     
     // Size control
     ctrl.appendChild(TegakiUI.buildSizeCtrlGroup());
+
+	// Size control
+	ctrl.appendChild(TegakiUI.buildStabilizationCtrlGroup());
     
     // Alpha control
     ctrl.appendChild(TegakiUI.buildAlphaCtrlGroup());
@@ -5941,6 +5989,36 @@ var TegakiUI = {
     ctrl.appendChild(row);
     
     return ctrl;
+  },
+
+  buildStabilizationCtrlGroup: function() {
+	  var el, ctrl, row;
+
+	  ctrl = this.buildCtrlGroup('stabilization', TegakiStrings.stabilization);
+
+	  row = $T.el('div');
+	  row.className = 'tegaki-ctrlrow';
+
+	  el = $T.el('input');
+	  el.id = 'tegaki-stabilization';
+	  el.className = 'tegaki-ctrl-range';
+	  el.min = 1;
+	  el.max = Tegaki.maxStabilization;
+	  el.type = 'range';
+	  el.title = TegakiKeybinds.getCaption('toolStabilization');
+	  $T.on(el, 'input', Tegaki.onToolStabilizationChange);
+	  row.appendChild(el);
+
+	  el = $T.el('input');
+	  el.id = 'tegaki-stabilization-lbl';
+	  el.setAttribute('maxlength', 3);
+	  el.className = 'tegaki-stealth-input tegaki-range-lbl';
+	  $T.on(el, 'input', Tegaki.onToolStabilizationChange);
+	  row.appendChild(el);
+
+	  ctrl.appendChild(row);
+
+	  return ctrl;
   },
   
   buildAlphaCtrlGroup: function() {
